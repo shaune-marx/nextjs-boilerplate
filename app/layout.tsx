@@ -9,20 +9,28 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "playdate",
-  description: "todaysplaydate.com",
+  metadataBase: new URL("https://todaysplaydate.com"),
+  title: {
+    default: "playdate — keep your friends in orbit",
+    template: "%s — playdate",
+  },
+  description:
+    "we’ll send you one fun question every day, addressed to a friend you want to talk to more often.",
+  openGraph: {
+    title: "playdate — keep your friends in orbit",
+    description:
+      "we’ll send you one fun question every day, addressed to a friend you want to talk to more often.",
+    url: "https://todaysplaydate.com",
+    siteName: "playdate",
+    images: ["/opengraph-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "playdate — keep your friends in orbit",
+    description:
+      "we’ll send you one fun question every day, addressed to a friend you want to talk to more often.",
+    images: ["/twitter-image.png"],
+  },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <body className={spaceMono.className} style={{ textTransform: "lowercase" }}>
-        {children}
-      </body>
-    </html>
-  );
 }

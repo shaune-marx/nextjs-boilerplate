@@ -14,9 +14,9 @@ export default function Home() {
           />
         </div>
 
-        <h1 style={{fontSize:'40px',lineHeight:1.1,margin:'0 0 12px'}}>Playdate</h1>
+    
         <p style={{fontSize:'20px',margin:'0 0 24px'}}>
-          Get one good 1:1 conversation started every day. We pick a friend, send a fun prompt, and make it easy to say hello.
+          want to keep your friends in your orbit? we'll send you a fun question every day, addressed to someone you want to talk to more often. 
         </p>
         <a
           href="#"

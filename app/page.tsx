@@ -8,8 +8,8 @@ export default function Home() {
           <Image
             src="/playdate-logo.png"
             alt="Playdate"
-            width={180}
-            height={48}
+            width={320}
+            height={86}
             priority
           />
         </div>

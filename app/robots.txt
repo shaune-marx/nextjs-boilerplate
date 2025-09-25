@@ -1,0 +1,4 @@
+user-agent: *
+allow: /
+
+sitemap: https://todaysplaydate.com/sitemap.xml

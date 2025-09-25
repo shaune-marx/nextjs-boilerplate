@@ -29,7 +29,7 @@ export default function Home() {
             fontWeight:600
           }}
         >
-          Get early access
+          sign up
         </a>
         <p style={{marginTop:12,fontSize:14,opacity:.7}}>
           Coming soon to todaysplaydate.com

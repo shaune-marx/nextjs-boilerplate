@@ -1,16 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import prompts from "../data/prompts.json";
 
 type Prompt = { text: string; type: "photo_caption" | "would_you_rather" | "question" | "other" };
 
-export default function InviteDemo() {
+function InviteInner() {
   const search = useSearchParams();
   const arr = prompts as Prompt[];
 
-  // initial from URL (friend `f`, index `i`)
   const initialFriend = (search.get("f") || "jordan").trim();
   const initialIndex = (() => {
     const i = Number(search.get("i"));
@@ -29,7 +28,6 @@ export default function InviteDemo() {
     let next = Math.floor(Math.random() * max);
     if (next === index && max > 1) next = (next + 1) % max;
     setIndex(next);
-    // update URL param for shareability without reload
     const url = new URL(window.location.href);
     url.searchParams.set("i", String(next));
     url.searchParams.set("f", friend);
@@ -55,7 +53,6 @@ export default function InviteDemo() {
     await copy(url.toString());
   };
 
-  // keep URL in sync if friend changes
   useEffect(() => {
     const url = new URL(window.location.href);
     url.searchParams.set("f", friend);
@@ -186,3 +183,12 @@ export default function InviteDemo() {
     </main>
   );
 }
+
+export default function InvitePage() {
+  return (
+    <Suspense fallback={null}>
+      <InviteInner />
+    </Suspense>
+  );
+}
+

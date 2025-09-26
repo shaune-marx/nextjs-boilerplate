@@ -1,1 +1,646 @@
-{}
+[
+  {
+    "text": "send a picture that could have this caption: highlight of my week",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what’s your least favorite job you’ve ever had?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: living the dream",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what’s the worst joke you know?",
+    "type": "question"
+  },
+  {
+    "text": "if you won the lottery but were trying to keep it quiet, what would be the first 3 subtle purchases you’d make?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: made this with my own 2 hands",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what’s your most-used catchphrase?",
+    "type": "question"
+  },
+  {
+    "text": "if you had to pick one brand to buy from exclusively for the rest of your life, which brand would you choose?",
+    "type": "question"
+  },
+  {
+    "text": "if you won a free vacation home that could be built anywhere in the world, where would you build it?",
+    "type": "question"
+  },
+  {
+    "text": "what’s your hidden talent?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: interior design is my passion",
+    "type": "photo_caption"
+  },
+  {
+    "text": "if you could remove one thing from Earth, what would it be?",
+    "type": "question"
+  },
+  {
+    "text": "which celebrity will you always defend?",
+    "type": "question"
+  },
+  {
+    "text": "if you could pull off a heist to steal a priceless item (but you could never sell without getting caught), what would you steal?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: take all my money",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: currently reading",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: #tbt",
+    "type": "photo_caption"
+  },
+  {
+    "text": "if you could instantly gain any skill, what would you choose?",
+    "type": "question"
+  },
+  {
+    "text": "what was your most recent Spotify search?",
+    "type": "question"
+  },
+  {
+    "text": "what do you get the most compliments on?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: 666 with a princess streak",
+    "type": "photo_caption"
+  },
+  {
+    "text": "if every job paid $1 million a year, what would you do?",
+    "type": "question"
+  },
+  {
+    "text": "what song would be your theme song if you were the main character in a TV show?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: I don’t think we’re in Kansas anymore",
+    "type": "photo_caption"
+  },
+  {
+    "text": "which trivia category are you best at?",
+    "type": "question"
+  },
+  {
+    "text": "what’s the biggest risk you’ve ever taken that didn't work out?",
+    "type": "question"
+  },
+  {
+    "text": "which song do you automatically sing along to no matter where you are?",
+    "type": "question"
+  },
+  {
+    "text": "if you could become an expert in one subject overnight, what would you pick?",
+    "type": "question"
+  },
+  {
+    "text": "which celebrity have you been told you look like, and which one do you WISH you looked like?",
+    "type": "question"
+  },
+  {
+    "text": "what grinds your gears?",
+    "type": "question"
+  },
+  {
+    "text": "what’s something your parents lied to you about?",
+    "type": "question"
+  },
+  {
+    "text": "what was your most recent Google search?",
+    "type": "question"
+  },
+  {
+    "text": "what’s the worst thing you’ve ever done that was worth it?",
+    "type": "question"
+  },
+  {
+    "text": "what’s the wildest piece of gossip you’ve ever heard?",
+    "type": "question"
+  },
+  {
+    "text": "what’s something you believed as a child that seems ridiculous now?",
+    "type": "question"
+  },
+  {
+    "text": "what compliment have you never forgotten?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: what dreams are made of",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what’s something you know how to do that most people don’t?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: proudest moment of my life",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: oops I did it again",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what’s something that should be acceptable, but isn’t?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: an icon",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what’s one subject you know everything about?",
+    "type": "question"
+  },
+  {
+    "text": "which TV show have you seen the most times?",
+    "type": "question"
+  },
+  {
+    "text": "if aliens visited Earth and wanted you to teach them about humans, what would you show them first?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: she's beauty and she's grace",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what’s the first lie you remember telling?",
+    "type": "question"
+  },
+  {
+    "text": "what’s something that seems far-fetched today but will be common knowledge in 25 years?",
+    "type": "question"
+  },
+  {
+    "text": "what have you been obsessed with lately?",
+    "type": "question"
+  },
+  {
+    "text": "if you had to choose between being minimally famous in a way where people occasionally recognize you on the street, or extremely famous but recognizable only by name, which would you prefer?",
+    "type": "question"
+  },
+  {
+    "text": "who do you claim to hate, but secretly envy?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: frame this for your mantle",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: aliens could study this to understand humanity",
+    "type": "photo_caption"
+  },
+  {
+    "text": "if you had to eat one meal every day for the rest of your life, what would it be?",
+    "type": "question"
+  },
+  {
+    "text": "if you had to describe your vibe in 3 emojis, which 3 would you choose?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: high art/low art",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what’s a common saying that annoys you?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: bury me here",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what’s your best piece of family lore?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: it's the little things",
+    "type": "photo_caption"
+  },
+  {
+    "text": "if you had to write a TV show, what would you choose for the genre, setting, and premise?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: killing me slowly",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: heaven is a place on Earth",
+    "type": "photo_caption"
+  },
+  {
+    "text": "if you could have either a time machine that traveled between the past and the present OR the future and the present, which would you choose?",
+    "type": "question"
+  },
+  {
+    "text": "send me your most recent screenshot and explain it to me",
+    "type": "other"
+  },
+  {
+    "text": "what video have you watched 50,000 times and it always makes you laugh?",
+    "type": "question"
+  },
+  {
+    "text": "if you could snap your fingers and redecorate your home in the style of 1 decade, which decade would you pick?",
+    "type": "question"
+  },
+  {
+    "text": "what’s one thing you’re always willing to spend extra $ on?",
+    "type": "question"
+  },
+  {
+    "text": "what’s your greatest achievement so far?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: oil on canvas, 2025",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what national holiday would you add to the calendar?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: me, as an inanimate object",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: I spent way too long on this",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: a thing of beauty",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: in this economy?",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: could eat this every day for the rest of my life",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: avant-garde",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what's been the biggest plot twist of your life so far?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: only God can judge me",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: I’ll have what she’s having",
+    "type": "photo_caption"
+  },
+  {
+    "text": "which actor do you think played a role so well you have a hard time seeing them as anything else?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: the cover of my memoir",
+    "type": "photo_caption"
+  },
+  {
+    "text": "if you could have any superpower, except invisibility, teleportation, or flying, what would you choose?",
+    "type": "question"
+  },
+  {
+    "text": "what's the funniest \"oops, wrong person\" text you've ever sent?",
+    "type": "question"
+  },
+  {
+    "text": "what’s something embarrassing you did in middle school you still think about?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: in a fire I’d go back for this",
+    "type": "photo_caption"
+  },
+  {
+    "text": "if you could wake up tomorrow and be the best in the world at one thing, what would you choose?",
+    "type": "question"
+  },
+  {
+    "text": "what word have you publicly mispronounced that still haunts you?",
+    "type": "question"
+  },
+  {
+    "text": "what hill will you die on?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: this belongs in a museum",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: there’s a story here",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what’s something that can immediately ruin your day?",
+    "type": "question"
+  },
+  {
+    "text": "what’s your most creative pickup line?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: if I go missing, use this photo",
+    "type": "photo_caption"
+  },
+  {
+    "text": "which cartoon character most resembles you (looks or personality)?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: if I were a cartoon character with only one outfit, it would be this",
+    "type": "photo_caption"
+  },
+  {
+    "text": "if you could pick 2 people you know to be your parents in the next life, who would you choose?",
+    "type": "question"
+  },
+  {
+    "text": "what’s the highest level of crime you would cover up for a friend?",
+    "type": "question"
+  },
+  {
+    "text": "if you could communicate with one kind of animal, what kind of animal would it be?",
+    "type": "question"
+  },
+  {
+    "text": "if you could have a pet that’s any animal at any size, what animal would you choose and what size would it be?",
+    "type": "question"
+  },
+  {
+    "text": "which celebrity do you secretly think would love you if they met you?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: gang’s all here",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: my latest obsession",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: I contain multitudes",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send the most recent selfie you took and explain the context",
+    "type": "other"
+  },
+  {
+    "text": "who do you think is the most annoying fictional character?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: my most prized possession",
+    "type": "photo_caption"
+  },
+  {
+    "text": "who was your first crush?",
+    "type": "question"
+  },
+  {
+    "text": "if you were delivering a 5-minute PSA to all Americans, what would your topic be?",
+    "type": "question"
+  },
+  {
+    "text": "send me the most recent video you took and explain the context",
+    "type": "other"
+  },
+  {
+    "text": "who’s the most famous person you’ve ever met?",
+    "type": "question"
+  },
+  {
+    "text": "what do you think you're most likely to become famous for, and what do you WISH you could become famous for?",
+    "type": "question"
+  },
+  {
+    "text": "if you had to live the rest of your life as an animal, which animal would you choose?",
+    "type": "question"
+  },
+  {
+    "text": "what is something you love that you wouldn’t recommend to anyone else?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: Vogue (strike a pose)",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what’s your most useless skill?",
+    "type": "question"
+  },
+  {
+    "text": "if you could live inside a TV show, which show would you choose?",
+    "type": "question"
+  },
+  {
+    "text": "have you ever had a paranormal experience?",
+    "type": "question"
+  },
+  {
+    "text": "what would you choose as your last meal?",
+    "type": "question"
+  },
+  {
+    "text": "what’s something legal that you think should be illegal?",
+    "type": "question"
+  },
+  {
+    "text": "if you could outsource one chore or task for free for the rest of your life, what would you pick?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: some people wait a lifetime for a moment like this",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what’s been taking up all of your brain space lately?",
+    "type": "question"
+  },
+  {
+    "text": "what’s something you think everyone else is just pretending to like?",
+    "type": "question"
+  },
+  {
+    "text": "what’s the most mind-blowing fact you know?",
+    "type": "question"
+  },
+  {
+    "text": "if humans lost the ability to lie, which industry would fall apart first?",
+    "type": "question"
+  },
+  {
+    "text": "if you could see any band or artist live in concert for free, who would you see?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: Ansel Adams who?",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: easy, breezy, beautiful (Covergirl)",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what was your favorite toy as a child?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: my whole heart",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: my muse",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what simple pleasure do you most look forward to?",
+    "type": "question"
+  },
+  {
+    "text": "what one mystery in the world would you want the answer to?",
+    "type": "question"
+  },
+  {
+    "text": "what’s a superstition you totally believe in?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: in my natural habitat",
+    "type": "photo_caption"
+  },
+  {
+    "text": "what’s a piece of conventional wisdom you don't agree with?",
+    "type": "question"
+  },
+  {
+    "text": "what’s your fashion ick?",
+    "type": "question"
+  },
+  {
+    "text": "which one would you rather live without in your home: washing machine, dishwasher, or television?",
+    "type": "would_you_rather"
+  },
+  {
+    "text": "what scene from a movie or show terrified you as a child?",
+    "type": "question"
+  },
+  {
+    "text": "what's your earliest memory?",
+    "type": "question"
+  },
+  {
+    "text": "send a picture that could have this caption: a moment of bliss",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: natural habitat",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: caught red-handed",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: in a fire I’d go back for",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: my everything",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: bad idea right?",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: OOO",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: most recent selfie",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: too good to be true",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: model behavior",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: it’s fine, I’m fine",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: prized possession",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: this isn’t what it looks like",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: this photo is haunted",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: mind your business",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: save some for the fishes",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: the cover of my coffee table book",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: Van Gogh who?",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: gotta go",
+    "type": "photo_caption"
+  },
+  {
+    "text": "send a picture that could have this caption: do you ever feel like a plastic bag drifting through the wind",
+    "type": "photo_caption"
+  }
+]

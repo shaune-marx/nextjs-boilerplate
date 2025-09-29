@@ -23,16 +23,26 @@ function InviteInner() {
 
   const current = useMemo(() => arr[index]?.text ?? "", [index, arr]);
 
-  const reroll = () => {
-    const max = arr.length;
-    let next = Math.floor(Math.random() * max);
-    if (next === index && max > 1) next = (next + 1) % max;
+  const reroll = async () => {
+  try {
+    const res = await fetch("/api/prompts", { cache: "no-store" });
+    if (!res.ok) throw new Error("failed to fetch prompt");
+    const data = await res.json(); // { index, text, type }
+    const next = Number(data.index);
     setIndex(next);
     const url = new URL(window.location.href);
     url.searchParams.set("i", String(next));
     url.searchParams.set("f", friend);
     window.history.replaceState(null, "", url.toString());
-  };
+  } catch {
+    // fallback to local random if api fails
+    const max = arr.length;
+    let next = Math.floor(Math.random() * max);
+    if (next === index && max > 1) next = (next + 1) % max;
+    setIndex(next);
+  }
+};
+
 
   const sms = `hey ${friend}! ${current}`;
   const smsHref = `sms:?&body=${encodeURIComponent(sms)}`;

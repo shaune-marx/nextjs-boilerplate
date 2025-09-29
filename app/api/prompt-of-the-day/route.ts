@@ -12,17 +12,23 @@ function hash(s: string) {
   return Math.abs(h);
 }
 
-export async function GET() {
-  const arr = prompts as Prompt[];
-  // use UTC date so everyone sees the same prompt globally
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const keyParam = url.searchParams.get("key"); // optional: "YYYY-MM-DD"
+
+  // default key = today's UTC date
   const today = new Date();
   const y = today.getUTCFullYear();
   const m = String(today.getUTCMonth() + 1).padStart(2, "0");
   const d = String(today.getUTCDate()).padStart(2, "0");
-  const key = `${y}-${m}-${d}`; // e.g., 2025-09-29
+  const utcKey = `${y}-${m}-${d}`;
 
+  const key = keyParam && /^\d{4}-\d{2}-\d{2}$/.test(keyParam) ? keyParam : utcKey;
+
+  const arr = prompts as Prompt[];
   const i = hash(key) % arr.length;
   const item = arr[i];
 
   return NextResponse.json({ index: i, ...item, date: key });
 }
+

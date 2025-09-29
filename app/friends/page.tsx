@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 function shuffleStable<T>(arr: T[], seed = 42) {
-  // deterministic shuffle (so reloading shows the same order)
+  // deterministic shuffle
   const a = arr.slice();
   let s = seed;
   const rand = () => {
@@ -18,18 +18,43 @@ function shuffleStable<T>(arr: T[], seed = 42) {
 }
 
 export default function FriendsPage() {
+  // 20 inputs
   const [names, setNames] = useState<string[]>(
     Array.from({ length: 20 }, () => "")
   );
 
-  const filled = names.map(n => n.trim()).filter(Boolean);
+  // --- load on mount, save on change (this is the snippet you asked about) ---
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("playdate_friends");
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) {
+          const next = Array.from({ length: 20 }, (_, i) => (arr[i] || ""));
+          setNames(next);
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
 
-  // simple 7-day rotation preview, no repeats
+  useEffect(() => {
+    try {
+      localStorage.setItem("playdate_friends", JSON.stringify(names));
+    } catch {
+      // ignore
+    }
+  }, [names]);
+  // --- end persistence snippet ---
+
+  const filled = names.map((n) => n.trim()).filter(Boolean);
+
+  // simple 7-day rotation preview, no repeats if >= 7 names
   const schedule = useMemo(() => {
     if (filled.length === 0) return [];
-    const order = shuffleStable(filled, 123); // fixed seed for now
+    const order = shuffleStable(filled, 123);
     const days = 7;
-    // repeat the list if fewer than 7 names
     const picks = Array.from({ length: days }, (_, i) => order[i % order.length]);
     return picks;
   }, [filled]);
@@ -79,3 +104,4 @@ export default function FriendsPage() {
     </main>
   );
 }
+

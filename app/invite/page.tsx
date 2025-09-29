@@ -2,97 +2,76 @@
 
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import prompts from "../data/prompts.json";
 
-type Prompt = { text: string; type: "photo_caption" | "would_you_rather" | "question" | "other" };
+type Pod = { index: number; text: string; type: string; date: string };
 
 function InviteInner() {
   const search = useSearchParams();
-  const arr = prompts as Prompt[];
 
   const initialFriend = (search.get("f") || "jordan").trim();
-  const initialIndex = (() => {
-    const i = Number(search.get("i"));
-    return Number.isFinite(i) && i >= 0 && i < arr.length
-      ? i
-      : Math.floor(Math.random() * arr.length);
-  })();
-
   const [friend, setFriend] = useState(initialFriend);
-  const [index, setIndex] = useState<number>(initialIndex);
+  const [pod, setPod] = useState<Pod | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const current = useMemo(() => arr[index]?.text ?? "", [index, arr]);
+  // fetch the prompt-of-the-day (same for everyone, based on UTC date)
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/prompt-of-the-day", { cache: "no-store" });
+        const data = (await res.json()) as Pod;
+        if (mounted) setPod(data);
+      } catch {
+        if (mounted) setPod(null);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
-  const reroll = async () => {
-  try {
-    const res = await fetch("/api/prompts", { cache: "no-store" });
-    if (!res.ok) throw new Error("failed to fetch prompt");
-    const data = await res.json(); // { index, text, type }
-    const next = Number(data.index);
-    setIndex(next);
+  // keep URL updated with friend for shareability (no index param anymore)
+  useEffect(() => {
     const url = new URL(window.location.href);
-    url.searchParams.set("i", String(next));
     url.searchParams.set("f", friend);
     window.history.replaceState(null, "", url.toString());
-  } catch {
-    // fallback to local random if api fails
-    const max = arr.length;
-    let next = Math.floor(Math.random() * max);
-    if (next === index && max > 1) next = (next + 1) % max;
-    setIndex(next);
-  }
-};
+  }, [friend]);
 
-
-  const sms = `hey ${friend}! ${current}`;
+  const text = pod?.text ?? "";
+  const sms = `hey ${friend}! ${text}`;
   const smsHref = `sms:?&body=${encodeURIComponent(sms)}`;
 
-  const copy = async (text: string) => {
+  const copy = async (val: string) => {
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(val);
       alert("copied to clipboard");
     } catch {
       alert("copy failed — you can select and copy manually.");
     }
   };
 
-  const copyLink = async () => {
+  const shareNative = async () => {
     const url = new URL(window.location.origin + "/invite");
-    url.searchParams.set("i", String(index));
     url.searchParams.set("f", friend);
-    await copy(url.toString());
+    const link = url.toString();
+
+    const title = "playdate — invitation to play";
+    const textToShare = `hey ${friend}! ${text}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text: textToShare, url: link });
+      } catch {
+        // user canceled or share failed
+      }
+    } else {
+      await copy(link);
+    }
   };
 
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("f", friend);
-    url.searchParams.set("i", String(index));
-    window.history.replaceState(null, "", url.toString());
-  }, [friend, index]);
-
-
-const shareNative = async () => {
-  const url = new URL(window.location.origin + "/invite");
-  url.searchParams.set("i", String(index));
-  url.searchParams.set("f", friend);
-  const link = url.toString();
-
-  const title = "playdate — invitation to play";
-  const text = `hey ${friend}! ${current}`;
-
-  if (navigator.share) {
-    try {
-      await navigator.share({ title, text, url: link });
-    } catch {
-      // user canceled or share failed; do nothing
-    }
-  } else {
-    await copy(link); // fallback to clipboard
-  }
-};
-
-
-  
   return (
     <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}>
       <div
@@ -124,7 +103,9 @@ const shareNative = async () => {
         </div>
 
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 14, opacity: 0.7 }}>prompt</div>
+          <div style={{ fontSize: 14, opacity: 0.7 }}>
+            prompt of the day{pod?.date ? ` — ${pod.date}` : ""}
+          </div>
           <div
             style={{
               width: "100%",
@@ -139,22 +120,8 @@ const shareNative = async () => {
               alignItems: "center",
             }}
           >
-            {current}
+            {loading ? "loading…" : text}
           </div>
-          <button
-            onClick={reroll}
-            style={{
-              marginTop: 8,
-              padding: "8px 12px",
-              borderRadius: 8,
-              border: "1px solid #000",
-              background: "transparent",
-              cursor: "pointer",
-              fontWeight: 600,
-            }}
-          >
-            new prompt
-          </button>
         </div>
 
         <div style={{ marginBottom: 12 }}>
@@ -199,7 +166,7 @@ const shareNative = async () => {
             copy sms
           </button>
           <button
-            onClick={copyLink}
+            onClick={shareNative}
             style={{
               padding: "10px 14px",
               borderRadius: 10,
@@ -209,23 +176,7 @@ const shareNative = async () => {
               cursor: "pointer",
             }}
           >
-<button
-  onClick={shareNative}
-  style={{
-    padding: "10px 14px",
-    borderRadius: 10,
-    border: "1px solid #000",
-    background: "transparent",
-    fontWeight: 600,
-    cursor: "pointer",
-  }}
->
-  share
-</button>
-
-
-            
-            copy link
+            share
           </button>
         </div>
       </div>

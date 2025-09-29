@@ -70,6 +70,29 @@ function InviteInner() {
     window.history.replaceState(null, "", url.toString());
   }, [friend, index]);
 
+
+const shareNative = async () => {
+  const url = new URL(window.location.origin + "/invite");
+  url.searchParams.set("i", String(index));
+  url.searchParams.set("f", friend);
+  const link = url.toString();
+
+  const title = "playdate — invitation to play";
+  const text = `hey ${friend}! ${current}`;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, text, url: link });
+    } catch {
+      // user canceled or share failed; do nothing
+    }
+  } else {
+    await copy(link); // fallback to clipboard
+  }
+};
+
+
+  
   return (
     <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}>
       <div

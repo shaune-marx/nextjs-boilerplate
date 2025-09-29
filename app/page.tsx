@@ -76,6 +76,13 @@ export default function Home() {
 </p>
 
 
+        <p style={{ marginTop: 16 }}>
+  <a href="/friends" style={{ textDecoration: "underline" }}>
+    add your friends ↗
+  </a>
+</p>
+
+
         <p style={{ marginTop: 12, fontSize: 14, opacity: 0.7 }}>
           coming soon to todaysplaydate.com
         </p>

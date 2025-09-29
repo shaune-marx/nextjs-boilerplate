@@ -209,6 +209,22 @@ const shareNative = async () => {
               cursor: "pointer",
             }}
           >
+<button
+  onClick={shareNative}
+  style={{
+    padding: "10px 14px",
+    borderRadius: 10,
+    border: "1px solid #000",
+    background: "transparent",
+    fontWeight: 600,
+    cursor: "pointer",
+  }}
+>
+  share
+</button>
+
+
+            
             copy link
           </button>
         </div>

@@ -5,6 +5,27 @@ import { useSearchParams } from "next/navigation";
 
 type Pod = { index: number; text: string; type: string; date: string };
 
+
+function localKeyFor10amCutover(): string {
+  const now = new Date(); // user's local time
+  let y = now.getFullYear();
+  let m = now.getMonth(); // 0-based
+  let d = now.getDate();
+
+  // before 10:00 local → use yesterday's date
+  if (now.getHours() < 10) {
+    const yday = new Date(y, m, d - 1);
+    y = yday.getFullYear();
+    m = yday.getMonth();
+    d = yday.getDate();
+  }
+
+  const mm = String(m + 1).padStart(2, "0");
+  const dd = String(d).padStart(2, "0");
+  return `${y}-${mm}-${dd}`; // YYYY-MM-DD
+}
+
+
 function InviteInner() {
   const search = useSearchParams();
 
@@ -14,24 +35,27 @@ function InviteInner() {
   const [loading, setLoading] = useState(true);
 
   // fetch the prompt-of-the-day (same for everyone, based on UTC date)
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        setLoading(true);
-        const res = await fetch("/api/prompt-of-the-day", { cache: "no-store" });
-        const data = (await res.json()) as Pod;
-        if (mounted) setPod(data);
-      } catch {
-        if (mounted) setPod(null);
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  // fetch the prompt-of-the-day for the local day (10:00 am cutover)
+useEffect(() => {
+  let mounted = true;
+  (async () => {
+    try {
+      setLoading(true);
+      const key = localKeyFor10amCutover(); // ← uses the helper you added
+      const res = await fetch(`/api/prompt-of-the-day?key=${key}`, { cache: "no-store" });
+      const data = (await res.json()) as Pod;
+      if (mounted) setPod(data);
+    } catch {
+      if (mounted) setPod(null);
+    } finally {
+      if (mounted) setLoading(false);
+    }
+  })();
+  return () => {
+    mounted = false;
+  };
+}, []);
+
 
   // keep URL updated with friend for shareability (no index param anymore)
   useEffect(() => {

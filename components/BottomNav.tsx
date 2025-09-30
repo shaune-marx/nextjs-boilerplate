@@ -231,40 +231,35 @@ export default function BottomNav() {
   type="button"
   className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
   onClick={() => {
-    // Try Gmail app compose, then fall back to Gmail web compose
     const to = "support@todaysplaydate.com";
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    // Known schemes: iOS often uses googlegmail://, some Android builds accept gmail://
-    const appSchemes = [
-      `gmail://co?to=${encodeURIComponent(to)}`,
-      `googlegmail://co?to=${encodeURIComponent(to)}`,
-    ];
+    if (isAndroid) {
+      // Open Gmail app via intent on Android (no popup), with web fallback
+      const intent = `intent://co?to=${encodeURIComponent(
+        to
+      )}#Intent;scheme=mailto;package=com.google.android.gm;end`;
+      window.location.href = intent;
+      setTimeout(() => {
+        window.location.href = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(
+          to
+        )}`;
+      }, 700);
+    } else {
+      // iOS & Desktop: use Gmail web compose to avoid Safari “invalid address” popup
+      window.location.href = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(
+        to
+      )}`;
+    }
 
-    let tried = 0;
-    const tryNext = () => {
-      if (tried < appSchemes.length) {
-        const url = appSchemes[tried++];
-        // Attempt to open scheme; if it fails, we’ll fall back shortly
-        window.location.href = url;
-        // After a brief delay, try the next or fall back to web
-        setTimeout(() => {
-          if (tried < appSchemes.length) {
-            tryNext();
-          } else {
-            window.location.href = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(to)}`;
-          }
-        }, 700);
-      }
-    };
-
-    tryNext();
-
-    // Close the sheet a moment later either way
-    setTimeout(() => setContactOpen(false), 900);
+    // Close the sheet shortly after navigation
+    setTimeout(() => setContactOpen(false), 400);
   }}
 >
   Open Gmail
 </button>
+
 
 
            

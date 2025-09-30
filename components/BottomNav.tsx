@@ -59,6 +59,8 @@ export default function BottomNav() {
   const [copied, setCopied] = useState(false);
 
   const firstContactRef = useRef<HTMLAnchorElement | null>(null);
+  const sheetRef = useRef<HTMLDivElement | null>(null);
+
 
 useEffect(() => {
   if (!contactOpen) return;
@@ -66,9 +68,54 @@ useEffect(() => {
   // Move focus into the sheet
   firstContactRef.current?.focus();
 
-  // Close on Escape
+  // Collect focusable elements inside the sheet
+  const focusableSelectors = [
+    'a[href]',
+    'button:not([disabled])',
+    'textarea:not([disabled])',
+    'input[type="text"]:not([disabled])',
+    'input[type="email"]:not([disabled])',
+    'input[type="search"]:not([disabled])',
+    'select:not([disabled])',
+    '[tabindex]:not([tabindex="-1"])',
+  ].join(',');
+
+  const getFocusables = () => {
+    const container = sheetRef.current;
+    if (!container) return [] as HTMLElement[];
+    return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors))
+      // Only keep visible, focusable items
+      .filter(el => !el.hasAttribute('disabled') && el.tabIndex !== -1 && el.offsetParent !== null);
+  };
+
+  // Key handler: Escape to close, Tab to trap focus
   const onKey = (e: KeyboardEvent) => {
-    if (e.key === "Escape") setContactOpen(false);
+    if (e.key === "Escape") {
+      setContactOpen(false);
+      return;
+    }
+    if (e.key === "Tab") {
+      const focusables = getFocusables();
+      if (focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+
+      if (e.shiftKey) {
+        // Shift+Tab: if on first, loop to last
+        if (active === first || !sheetRef.current?.contains(active)) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        // Tab: if on last, loop to first
+        if (active === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
   };
   document.addEventListener("keydown", onKey);
 
@@ -81,6 +128,7 @@ useEffect(() => {
     document.body.style.overflow = prevOverflow;
   };
 }, [contactOpen]);
+
 
 
 
@@ -153,6 +201,7 @@ useEffect(() => {
       {/* Contact sheet */}
       {contactOpen && (
         <div
+          ref={sheetRef}
           role="dialog"
           aria-modal="true"
           aria-label="Contact options"

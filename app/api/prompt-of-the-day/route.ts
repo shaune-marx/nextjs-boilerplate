@@ -30,14 +30,13 @@ export async function GET(req: Request) {
   const item = arr[i];
 
   return NextResponse.json(
-  { index: i, ...item, date: key },
-  {
-    headers: {
-      "Cache-Control": "no-store, no-cache, must-revalidate",
-      "Pragma": "no-cache",
-      "Expires": "0",
-    },
-  }
-);
-
-
+    { index: i, ...item, date: key },
+    {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
+    }
+  );
+}

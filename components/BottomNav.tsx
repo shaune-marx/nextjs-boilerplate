@@ -44,10 +44,11 @@ const FileIcon = (p: React.SVGProps<SVGSVGElement>) => (
 );
 
 // --- Your six nav items ---
+// Note: contact uses a `mailto:` link so it opens the user’s email client.
 const ITEMS = [
   { href: "/", label: "sign up", Icon: HomeIcon },
   { href: "/friends", label: "add friends", Icon: UsersIcon },
-  { href: "/contact", label: "contact", Icon: MailIcon },
+  { href: "mailto:support@todaysplaydate.com", label: "contact", Icon: MailIcon },
   { href: "/about", label: "about", Icon: InfoIcon },
   { href: "/privacy", label: "privacy", Icon: ShieldIcon },
   { href: "/terms", label: "terms", Icon: FileIcon },
@@ -75,22 +76,38 @@ export default function BottomNav({ hiddenPaths = ["/i/"] }: { hiddenPaths?: str
         )}
       >
         {ITEMS.map(({ href, label, Icon }) => {
-          const active = pathname === href || (href !== "/" && pathname?.startsWith(href));
+          const isExternal = href.startsWith("mailto:") || href.startsWith("http");
+          const active = !isExternal && (pathname === href || (href !== "/" && pathname?.startsWith(href)));
+
           return (
             <li key={href} className="h-full">
-              <Link
-                href={href}
-                aria-label={label}
-                className={cn(
-                  "group flex h-full flex-col items-center justify-center rounded-xl transition",
-                  active
-                    ? "text-black dark:text-white"
-                    : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
-                )}
-              >
-                <Icon className={cn("h-5 w-5", active && "scale-110")} />
-                <span className={cn("text-[11px] leading-3 mt-1", active && "font-medium")}>{label}</span>
-              </Link>
+              {isExternal ? (
+                <a
+                  href={href}
+                  aria-label={label}
+                  className={cn(
+                    "group flex h-full flex-col items-center justify-center rounded-xl transition",
+                    "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
+                  )}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span className="text-[11px] leading-3 mt-1">{label}</span>
+                </a>
+              ) : (
+                <Link
+                  href={href}
+                  aria-label={label}
+                  className={cn(
+                    "group flex h-full flex-col items-center justify-center rounded-xl transition",
+                    active
+                      ? "text-black dark:text-white"
+                      : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
+                  )}
+                >
+                  <Icon className={cn("h-5 w-5", active && "scale-110")} />
+                  <span className={cn("text-[11px] leading-3 mt-1", active && "font-medium")}>{label}</span>
+                </Link>
+              )}
             </li>
           );
         })}
@@ -98,5 +115,6 @@ export default function BottomNav({ hiddenPaths = ["/i/"] }: { hiddenPaths?: str
     </nav>
   );
 }
+
 
 

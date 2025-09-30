@@ -231,27 +231,29 @@ export default function BottomNav() {
   type="button"
   className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
   onClick={() => {
-    const to = "support@todaysplaydate.com";
-    const isAndroid = /Android/i.test(navigator.userAgent);
-    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const to = "support@todaysplaydate.com";
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    if (isAndroid) {
-      // Open Gmail app via intent on Android (no popup), with web fallback
-      const intent = `intent://co?to=${encodeURIComponent(
-        to
-      )}#Intent;scheme=mailto;package=com.google.android.gm;end`;
-      window.location.href = intent;
-      setTimeout(() => {
-        window.location.href = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(
-          to
-        )}`;
-      }, 700);
-    } else {
-      // iOS & Desktop: use Gmail web compose to avoid Safari “invalid address” popup
-      window.location.href = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(
-        to
-      )}`;
-    }
+  if (isAndroid) {
+    // Android: open Gmail app via intent, then fall back to Gmail web compose
+    const intent = `intent://co?to=${encodeURIComponent(to)}#Intent;scheme=mailto;package=com.google.android.gm;end`;
+    window.location.href = intent;
+    setTimeout(() => {
+      window.location.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}`;
+    }, 700);
+  } else if (isIOS) {
+    // iOS: use ONLY the Gmail iOS scheme (googlegmail://) to avoid the initial Safari error.
+    // This should prompt once (“Open in Gmail?”) and then open a draft with the To: prefilled.
+    window.location.href = `googlegmail://co?to=${encodeURIComponent(to)}`;
+    // Close the sheet shortly after
+    setTimeout(() => setContactOpen(false), 400);
+  } else {
+    // Desktop (and other): go to Gmail web compose with To: prefilled
+    window.location.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}`;
+    setTimeout(() => setContactOpen(false), 400);
+  }
+}}
 
     // Close the sheet shortly after navigation
     setTimeout(() => setContactOpen(false), 400);

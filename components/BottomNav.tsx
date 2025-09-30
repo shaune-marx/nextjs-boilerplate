@@ -83,30 +83,36 @@ export default function BottomNav({ hiddenPaths = ["/i/"] }: { hiddenPaths?: str
             <li key={href} className="h-full">
               {isExternal ? (
                 <a
-                  href={href}
-                  aria-label={label}
-                  className={cn(
-                    "group flex h-full flex-col items-center justify-center rounded-xl transition",
-                    "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
-                  )}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span className="text-[11px] leading-3 mt-1">{label}</span>
-                </a>
+  href={href}
+  aria-label={label}
+  title={label}
+  rel="noopener noreferrer"
+  className={cn(
+    "group flex h-full flex-col items-center justify-center rounded-xl transition",
+    "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
+  )}
+>
+  <Icon className="h-5 w-5" />
+  <span className="text-[11px] leading-3 mt-1">{label}</span>
+</a>
+
               ) : (
-                <Link
-                  href={href}
-                  aria-label={label}
-                  className={cn(
-                    "group flex h-full flex-col items-center justify-center rounded-xl transition",
-                    active
-                      ? "text-black dark:text-white"
-                      : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
-                  )}
-                >
-                  <Icon className={cn("h-5 w-5", active && "scale-110")} />
-                  <span className={cn("text-[11px] leading-3 mt-1", active && "font-medium")}>{label}</span>
-                </Link>
+              <Link
+  href={href}
+  aria-label={label}
+  aria-current={active ? "page" : undefined}
+  title={label}
+  className={cn(
+    "group flex h-full flex-col items-center justify-center rounded-xl transition",
+    active
+      ? "text-black dark:text-white"
+      : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
+  )}
+>
+  <Icon className={cn("h-5 w-5", active && "scale-110")} />
+  <span className={cn("text-[11px] leading-3 mt-1", active && "font-medium")}>{label}</span>
+</Link>
+
               )}
             </li>
           );

@@ -56,6 +56,7 @@ const NAV_ITEMS = [
 export default function BottomNav() {
   const pathname = usePathname();
   const [contactOpen, setContactOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const firstContactRef = useRef<HTMLAnchorElement | null>(null);
 
@@ -157,31 +158,52 @@ useEffect(() => {
           <div className="w-full max-w-screen-sm rounded-t-2xl bg-white p-4 shadow-lg dark:bg-neutral-900">
             <div className="mx-auto h-1 w-10 rounded-full bg-neutral-300/80 dark:bg-neutral-700/80 mb-3" />
             <h2 className="text-center text-base mb-2">contact playdate</h2>
-            <div className="grid gap-2">
-              <a
-                ref={firstContactRef}
-                tabIndex={0}
-                href="mailto:support@todaysplaydate.com"
-                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
-                onClick={() => setContactOpen(false)}
-              >
-                Open email app
-              </a>
-              <a
-                href="https://mail.google.com/mail/?view=cm&to=support@todaysplaydate.com"
-                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
-                onClick={() => setContactOpen(false)}
-              >
-                Open Gmail
-              </a>
-              <button
-                type="button"
-                className="rounded-lg px-4 py-3 text-center underline opacity-80"
-                onClick={() => setContactOpen(false)}
-              >
-                Cancel
-              </button>
-            </div>
+    <div className="grid gap-2">
+  <a
+    ref={firstContactRef}
+    tabIndex={0}
+    href="mailto:support@todaysplaydate.com"
+    className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+    onClick={() => setContactOpen(false)}
+  >
+    Open email app
+  </a>
+  <a
+    href="https://mail.google.com/mail/?view=cm&to=support@todaysplaydate.com"
+    className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+    onClick={() => setContactOpen(false)}
+  >
+    Open Gmail
+  </a>
+  <button
+    type="button"
+    className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+    onClick={async () => {
+      try {
+        await navigator.clipboard.writeText("support@todaysplaydate.com");
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch {
+        // As a fallback, open a mailto if clipboard isn't available
+        window.location.href = "mailto:support@todaysplaydate.com";
+      }
+    }}
+  >
+    {copied ? "Copied!" : "Copy email address"}
+  </button>
+  <button
+    type="button"
+    className="rounded-lg px-4 py-3 text-center underline opacity-80"
+    onClick={() => setContactOpen(false)}
+  >
+    Cancel
+  </button>
+  <p className="text-center text-xs opacity-70 mt-1">
+    {copied ? "Email address copied to clipboard." : "\u00A0"}
+  </p>
+</div>
+
+
           </div>
         </div>
       )}

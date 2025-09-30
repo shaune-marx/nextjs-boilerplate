@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 type Pod = { index: number; text: string; type: string; date: string };
@@ -66,16 +66,8 @@ useEffect(() => {
 
   const text = pod?.text ?? "";
   const sms = `hey ${friend}! ${text}`;
-  const smsHref = `sms:?&body=${encodeURIComponent(sms)}`;
+ 
 
-  const copy = async (val: string) => {
-    try {
-      await navigator.clipboard.writeText(val);
-      alert("copied to clipboard");
-    } catch {
-      alert("copy failed — you can select and copy manually.");
-    }
-  };
 
   const shareNative = async () => {
     const url = new URL(window.location.origin + "/invite");

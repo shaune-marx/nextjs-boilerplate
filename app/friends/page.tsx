@@ -50,6 +50,13 @@ export default function FriendsPage() {
 
   const filled = names.map((n) => n.trim()).filter(Boolean);
 
+  const [selected, setSelected] = useState<string>("");
+useEffect(() => {
+  // pick the first filled name by default
+  setSelected(filled[0] || "");
+}, [filled]);
+
+
   // simple 7-day rotation preview, no repeats if >= 7 names
   const schedule = useMemo(() => {
     if (filled.length === 0) return [];
@@ -100,6 +107,39 @@ export default function FriendsPage() {
             </ol>
           )}
         </div>
+
+<div style={{ marginTop: 16, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+  <select
+    value={selected}
+    onChange={(e) => setSelected(e.target.value)}
+    style={{ padding: "10px 12px", border: "1px solid #000", borderRadius: 8 }}
+  >
+    {filled.length === 0 ? (
+      <option value="">add friends above</option>
+    ) : (
+      filled.map((n) => (
+        <option key={n} value={n}>{n}</option>
+      ))
+    )}
+  </select>
+
+  <a
+    href={selected ? `/invite?f=${encodeURIComponent(selected)}` : "#"}
+    style={{
+      padding: "10px 14px",
+      borderRadius: 10,
+      border: "1px solid #000",
+      fontWeight: 600,
+      textDecoration: "none",
+      pointerEvents: selected ? "auto" : "none",
+      opacity: selected ? 1 : 0.5,
+    }}
+  >
+    open invite
+  </a>
+</div>
+
+        
       </div>
     </main>
   );

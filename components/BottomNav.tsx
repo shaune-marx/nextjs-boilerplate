@@ -183,6 +183,30 @@ useEffect(() => {
     className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
     onClick={() => setContactOpen(false)}
   >
+
+<button
+  type="button"
+  className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+  onClick={() => {
+    // Try to open the native Gmail app
+    const gmailScheme = "gmail://co?to=support@todaysplaydate.com";
+    // If the scheme isn't handled, fall back to Gmail web after a short delay
+    const fallback = setTimeout(() => {
+      window.location.href =
+        "https://mail.google.com/mail/?view=cm&to=support@todaysplaydate.com";
+    }, 700);
+
+    // Attempt to open the app scheme
+    window.location.href = gmailScheme;
+
+    // If user interacts and it succeeds, closing the sheet is fine:
+    setTimeout(() => setContactOpen(false), 800);
+  }}
+>
+  Open Gmail app
+</button>
+
+    
     Open Gmail
   </a>
   <button

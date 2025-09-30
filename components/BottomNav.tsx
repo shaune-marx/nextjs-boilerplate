@@ -47,7 +47,7 @@ const FileIcon = (p: React.SVGProps<SVGSVGElement>) => (
 // Note: contact uses a `mailto:` link so it opens the user’s email client.
 const ITEMS = [
   { href: "/", label: "sign up", Icon: HomeIcon },
-  { href: "/friends", label: "add friends", Icon: UsersIcon },
+  { href: "/friends", label: "friends", Icon: UsersIcon },
   { href: "mailto:support@todaysplaydate.com", label: "contact", Icon: MailIcon },
   { href: "/about", label: "about", Icon: InfoIcon },
   { href: "/privacy", label: "privacy", Icon: ShieldIcon },

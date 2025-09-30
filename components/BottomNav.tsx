@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -56,6 +56,22 @@ const NAV_ITEMS = [
 export default function BottomNav() {
   const pathname = usePathname();
   const [contactOpen, setContactOpen] = useState(false);
+
+  const firstContactRef = useRef<HTMLAnchorElement | null>(null);
+
+useEffect(() => {
+  if (!contactOpen) return;
+  // Focus the first action when the sheet opens
+  firstContactRef.current?.focus();
+
+  // Close on Escape
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key === "Escape") setContactOpen(false);
+  };
+  document.addEventListener("keydown", onKey);
+  return () => document.removeEventListener("keydown", onKey);
+}, [contactOpen]);
+
 
   return (
     <>
@@ -143,6 +159,8 @@ export default function BottomNav() {
             <h2 className="text-center text-base mb-2">contact playdate</h2>
             <div className="grid gap-2">
               <a
+                ref={firstContactRef}
+                tabIndex={0}
                 href="mailto:support@todaysplaydate.com"
                 className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
                 onClick={() => setContactOpen(false)}

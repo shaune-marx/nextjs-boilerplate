@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -43,93 +44,133 @@ const FileIcon = (p: React.SVGProps<SVGSVGElement>) => (
   </IconBase>
 );
 
-// --- Your six nav items ---
-// Note: contact uses a `mailto:` link so it opens the user’s email client.
-const ITEMS = [
+// --- Non-contact nav items ---
+const NAV_ITEMS = [
   { href: "/", label: "sign up", Icon: HomeIcon },
   { href: "/friends", label: "friends", Icon: UsersIcon },
-  { href: "mailto:support@todaysplaydate.com", label: "contact", Icon: MailIcon },
   { href: "/about", label: "about", Icon: InfoIcon },
   { href: "/privacy", label: "privacy", Icon: ShieldIcon },
   { href: "/terms", label: "terms", Icon: FileIcon },
 ] as const;
 
-export default function BottomNav() 
- {
+export default function BottomNav() {
   const pathname = usePathname();
-
+  const [contactOpen, setContactOpen] = useState(false);
 
   return (
-   <nav
-  role="navigation"
-  aria-label="Primary"
-  className={cn(
-    "fixed inset-x-0 bottom-0 z-50 border-t",
-    "backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-neutral-900/70",
-    "bg-white dark:bg-neutral-900"
-  )}
->
-      <ul
+    <>
+      <nav
+        role="navigation"
+        aria-label="Primary"
         className={cn(
-          "mx-auto grid max-w-screen-sm grid-cols-6",
-          "h-16 items-center gap-1 px-2",
-          "pb-[env(safe-area-inset-bottom)]"
+          "fixed inset-x-0 bottom-0 z-50 border-t",
+          "backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-neutral-900/70",
+          "bg-white dark:bg-neutral-900"
         )}
       >
-        {ITEMS.map(({ href, label, Icon }) => {
-          const isExternal = href.startsWith("mailto:") || href.startsWith("http");
-          const active = !isExternal && (pathname === href || (href !== "/" && pathname?.startsWith(href)));
+        <ul
+          className={cn(
+            "mx-auto grid max-w-screen-sm grid-cols-6",
+            "h-16 items-center gap-1 px-2",
+            "pb-[env(safe-area-inset-bottom)]"
+          )}
+        >
+          {NAV_ITEMS.map(({ href, label, Icon }) => {
+            const active = pathname === href || (href !== "/" && pathname?.startsWith(href));
+            return (
+              <li key={href} className="h-full">
+                <Link
+                  href={href}
+                  aria-label={label}
+                  aria-current={active ? "page" : undefined}
+                  title={label}
+                  className={cn(
+                    "group flex h-full flex-col items-center justify-center rounded-xl transition",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+                    "focus-visible:ring-black dark:focus-visible:ring-white",
+                    "focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900",
+                    active
+                      ? "text-black dark:text-white"
+                      : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
+                  )}
+                >
+                  <Icon aria-hidden="true" className={cn("h-5 w-5", active && "scale-110")} />
+                  <span className={cn("text-[11px] leading-3 mt-1", active && "font-medium")}>{label}</span>
+                </Link>
+              </li>
+            );
+          })}
 
-          return (
-            <li key={href} className="h-full">
-              {isExternal ? (
-                <a
-  href={href}
-  aria-label={label}
-  title={label}
-  rel="noopener noreferrer"
-  className={cn(
-    "group flex h-full flex-col items-center justify-center rounded-xl transition",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-    "focus-visible:ring-black dark:focus-visible:ring-white",
-    "focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900",
-    "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
-  )}
->
-  <Icon aria-hidden="true" className="h-5 w-5" />
-  <span className="text-[11px] leading-3 mt-1">{label}</span>
-</a>
-
-
-              ) : (
-           <Link
-  href={href}
-  aria-label={label}
-  aria-current={active ? "page" : undefined}
-  title={label}
-  className={cn(
-    "group flex h-full flex-col items-center justify-center rounded-xl transition",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-    "focus-visible:ring-black dark:focus-visible:ring-white",
-    "focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900",
-    active
-      ? "text-black dark:text-white"
-      : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
-  )}
->
-  <Icon aria-hidden="true" className={cn("h-5 w-5", active && "scale-110")} />
-  <span className={cn("text-[11px] leading-3 mt-1", active && "font-medium")}>{label}</span>
-</Link>
-
-
+          {/* Contact button (opens sheet) */}
+          <li className="h-full">
+            <button
+              type="button"
+              aria-label="contact"
+              title="contact"
+              onClick={() => setContactOpen(true)}
+              className={cn(
+                "group flex h-full w-full flex-col items-center justify-center rounded-xl transition",
+                "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+                "focus-visible:ring-black dark:focus-visible:ring-white",
+                "focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900"
               )}
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
+            >
+              <MailIcon aria-hidden="true" className="h-5 w-5" />
+              <span className="text-[11px] leading-3 mt-1">contact</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      {/* Contact sheet */}
+      {contactOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Contact options"
+          className="fixed inset-0 z-[60] flex items-end justify-center"
+        >
+          {/* Backdrop */}
+          <button
+            aria-label="Close"
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setContactOpen(false)}
+          />
+          {/* Sheet */}
+          <div className="w-full max-w-screen-sm rounded-t-2xl bg-white p-4 shadow-lg dark:bg-neutral-900">
+            <div className="mx-auto h-1 w-10 rounded-full bg-neutral-300/80 dark:bg-neutral-700/80 mb-3" />
+            <h2 className="text-center text-base mb-2">contact playdate</h2>
+            <div className="grid gap-2">
+              <a
+                href="mailto:support@todaysplaydate.com"
+                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                onClick={() => setContactOpen(false)}
+              >
+                Open email app
+              </a>
+              <a
+                href="https://mail.google.com/mail/?view=cm&to=support@todaysplaydate.com"
+                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                onClick={() => setContactOpen(false)}
+              >
+                Open Gmail
+              </a>
+              <button
+                type="button"
+                className="rounded-lg px-4 py-3 text-center underline opacity-80"
+                onClick={() => setContactOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
+
 
 
 

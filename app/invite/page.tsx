@@ -29,7 +29,7 @@ function localKeyFor10amCutover(): string {
 function InviteInner() {
   const search = useSearchParams();
 
-  const initialFriend = (search.get("f") || "jordan").trim();
+  const initialFriend = (search.get("f") || "").trim();
   const [friend, setFriend] = useState(initialFriend);
   const [pod, setPod] = useState<Pod | null>(null);
   const [loading, setLoading] = useState(true);
@@ -116,6 +116,7 @@ useEffect(() => {
             value={friend}
             onChange={(e) => setFriend(e.target.value)}
             aria-label="friend name"
+            placeholder="friend name"
             style={{
               width: "100%",
               marginTop: 6,

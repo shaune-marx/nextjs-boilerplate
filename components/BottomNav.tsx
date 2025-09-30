@@ -61,76 +61,68 @@ export default function BottomNav() {
   const firstContactRef = useRef<HTMLAnchorElement | null>(null);
   const sheetRef = useRef<HTMLDivElement | null>(null);
 
+  // Focus management, ESC-to-close, scroll lock, and focus trap
+  useEffect(() => {
+    if (!contactOpen) return;
 
-useEffect(() => {
-  if (!contactOpen) return;
+    // Move focus into the sheet
+    firstContactRef.current?.focus();
 
-  // Move focus into the sheet
-  firstContactRef.current?.focus();
+    const focusableSelectors = [
+      'a[href]',
+      'button:not([disabled])',
+      'textarea:not([disabled])',
+      'input[type="text"]:not([disabled])',
+      'input[type="email"]:not([disabled])',
+      'input[type="search"]:not([disabled])',
+      'select:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])',
+    ].join(',');
 
-  // Collect focusable elements inside the sheet
-  const focusableSelectors = [
-    'a[href]',
-    'button:not([disabled])',
-    'textarea:not([disabled])',
-    'input[type="text"]:not([disabled])',
-    'input[type="email"]:not([disabled])',
-    'input[type="search"]:not([disabled])',
-    'select:not([disabled])',
-    '[tabindex]:not([tabindex="-1"])',
-  ].join(',');
+    const getFocusables = () => {
+      const container = sheetRef.current;
+      if (!container) return [] as HTMLElement[];
+      return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors))
+        .filter(el => !el.hasAttribute("disabled") && el.tabIndex !== -1 && el.offsetParent !== null);
+    };
 
-  const getFocusables = () => {
-    const container = sheetRef.current;
-    if (!container) return [] as HTMLElement[];
-    return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors))
-      // Only keep visible, focusable items
-      .filter(el => !el.hasAttribute('disabled') && el.tabIndex !== -1 && el.offsetParent !== null);
-  };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setContactOpen(false);
+        return;
+      }
+      if (e.key === "Tab") {
+        const focusables = getFocusables();
+        if (focusables.length === 0) return;
 
-  // Key handler: Escape to close, Tab to trap focus
-  const onKey = (e: KeyboardEvent) => {
-    if (e.key === "Escape") {
-      setContactOpen(false);
-      return;
-    }
-    if (e.key === "Tab") {
-      const focusables = getFocusables();
-      if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        const active = document.activeElement as HTMLElement | null;
 
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-      const active = document.activeElement as HTMLElement | null;
-
-      if (e.shiftKey) {
-        // Shift+Tab: if on first, loop to last
-        if (active === first || !sheetRef.current?.contains(active)) {
-          e.preventDefault();
-          last.focus();
-        }
-      } else {
-        // Tab: if on last, loop to first
-        if (active === last) {
-          e.preventDefault();
-          first.focus();
+        if (e.shiftKey) {
+          if (active === first || !sheetRef.current?.contains(active)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (active === last) {
+            e.preventDefault();
+            first.focus();
+          }
         }
       }
-    }
-  };
-  document.addEventListener("keydown", onKey);
+    };
+    document.addEventListener("keydown", onKey);
 
-  // Prevent background scrolling while sheet is open
-  const prevOverflow = document.body.style.overflow;
-  document.body.style.overflow = "hidden";
+    // Prevent background scrolling while sheet is open
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-  return () => {
-    document.removeEventListener("keydown", onKey);
-    document.body.style.overflow = prevOverflow;
-  };
-}, [contactOpen]);
-
-
-
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [contactOpen]);
 
   return (
     <>
@@ -170,12 +162,12 @@ useEffect(() => {
                   )}
                 >
                   <Icon
-  aria-hidden="true"
-  className={cn(
-    "h-5 w-5 transition-transform motion-reduce:transition-none",
-    active && "motion-safe:scale-110"
-  )}
-/>
+                    aria-hidden="true"
+                    className={cn(
+                      "h-5 w-5 transition-transform motion-reduce:transition-none",
+                      active && "motion-safe:scale-110"
+                    )}
+                  />
                   <span className={cn("text-[11px] leading-3 mt-1", active && "font-medium")}>{label}</span>
                 </Link>
               </li>
@@ -204,44 +196,100 @@ useEffect(() => {
         </ul>
       </nav>
 
-      {/* Contact sheet */}
       {contactOpen && (
-       
-      
-<div
-  ref={sheetRef}
-  role="dialog"
-  aria-modal="true"
-  aria-label="Contact options"
-  className="fixed inset-0 z-[60] flex items-end justify-center"
->
-  {/* Backdrop (z-0) */}
-  <div
-    className="fixed inset-0 bg-black/40 z-0"
-    aria-hidden="true"
-    onClick={() => setContactOpen(false)}
-  />
+        <div
+          ref={sheetRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Contact options"
+          className="fixed inset-0 z-[60] flex items-end justify-center"
+        >
+          {/* Backdrop (behind the sheet) */}
+          <div
+            className="fixed inset-0 bg-black/40 z-0"
+            aria-hidden="true"
+            onClick={() => setContactOpen(false)}
+          />
 
-  {/* Sheet panel (z-10 so it sits above the backdrop) */}
-  <div className="relative z-10 w-full max-w-screen-sm rounded-t-2xl bg-white p-4 shadow-lg dark:bg-neutral-900">
-    <div className="mx-auto h-1 w-10 rounded-full bg-neutral-300/80 dark:bg-neutral-700/80 mb-3" />
-    <h2 className="text-center text-base mb-2">contact playdate</h2>
-    {/* keep your existing button grid here */}
-    <div className="grid gap-2">
-      {/* ... your links & buttons ... */}
-    </div>
-  </div>
-</div>
+          {/* Sheet panel (above the backdrop) */}
+          <div className="relative z-10 w-full max-w-screen-sm rounded-t-2xl bg-white p-4 shadow-lg dark:bg-neutral-900">
+            <div className="mx-auto h-1 w-10 rounded-full bg-neutral-300/80 dark:bg-neutral-700/80 mb-3" />
+            <h2 className="text-center text-base mb-2">contact playdate</h2>
 
+            <div className="grid gap-2">
+              <a
+                ref={firstContactRef}
+                tabIndex={0}
+                href="mailto:support@todaysplaydate.com"
+                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                onClick={() => setContactOpen(false)}
+              >
+                Open email app
+              </a>
 
+              <button
+                type="button"
+                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                onClick={() => {
+                  const gmailScheme = "gmail://co?to=support@todaysplaydate.com";
+                  const fallback = setTimeout(() => {
+                    window.location.href =
+                      "https://mail.google.com/mail/?view=cm&to=support@todaysplaydate.com";
+                  }, 700);
+                  // Attempt to open the app scheme
+                  window.location.href = gmailScheme;
+                  // Close shortly after
+                  setTimeout(() => {
+                    clearTimeout(fallback);
+                    setContactOpen(false);
+                  }, 800);
+                }}
+              >
+                Open Gmail app
+              </button>
 
+              <a
+                href="https://mail.google.com/mail/?view=cm&to=support@todaysplaydate.com"
+                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                onClick={() => setContactOpen(false)}
+              >
+                Open Gmail
+              </a>
+
+              <button
+                type="button"
+                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText("support@todaysplaydate.com");
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  } catch {
+                    window.location.href = "mailto:support@todaysplaydate.com";
+                  }
+                }}
+              >
+                {copied ? "Copied!" : "Copy email address"}
+              </button>
+
+              <button
+                type="button"
+                className="rounded-lg px-4 py-3 text-center underline opacity-80"
+                onClick={() => setContactOpen(false)}
+              >
+                Cancel
+              </button>
+
+              <p className="text-center text-xs opacity-70 mt-1">
+                {copied ? "Email address copied to clipboard." : "\u00A0"}
+              </p>
+            </div>
           </div>
         </div>
       )}
     </>
   );
 }
-
 
 
 

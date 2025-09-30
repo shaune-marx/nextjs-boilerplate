@@ -62,7 +62,8 @@ export default function BottomNav() {
 
 useEffect(() => {
   if (!contactOpen) return;
-  // Focus the first action when the sheet opens
+
+  // Move focus into the sheet
   firstContactRef.current?.focus();
 
   // Close on Escape
@@ -70,8 +71,17 @@ useEffect(() => {
     if (e.key === "Escape") setContactOpen(false);
   };
   document.addEventListener("keydown", onKey);
-  return () => document.removeEventListener("keydown", onKey);
+
+  // Prevent background scrolling while sheet is open
+  const prevOverflow = document.body.style.overflow;
+  document.body.style.overflow = "hidden";
+
+  return () => {
+    document.removeEventListener("keydown", onKey);
+    document.body.style.overflow = prevOverflow;
+  };
 }, [contactOpen]);
+
 
 
   return (

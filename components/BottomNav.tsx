@@ -169,7 +169,13 @@ useEffect(() => {
                       : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
                   )}
                 >
-                  <Icon aria-hidden="true" className={cn("h-5 w-5", active && "scale-110")} />
+                  <Icon
+  aria-hidden="true"
+  className={cn(
+    "h-5 w-5 transition-transform motion-reduce:transition-none",
+    active && "motion-safe:scale-110"
+  )}
+/>
                   <span className={cn("text-[11px] leading-3 mt-1", active && "font-medium")}>{label}</span>
                 </Link>
               </li>

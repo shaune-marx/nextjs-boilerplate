@@ -95,7 +95,7 @@ export default function BottomNav({ hiddenPaths = ["/i/"] }: { hiddenPaths?: str
     "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
   )}
 >
-  <Icon className="h-5 w-5" />
+  <Icon aria-hidden="true" className="h-5 w-5" />
   <span className="text-[11px] leading-3 mt-1">{label}</span>
 </a>
 
@@ -116,7 +116,7 @@ export default function BottomNav({ hiddenPaths = ["/i/"] }: { hiddenPaths?: str
       : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
   )}
 >
-  <Icon className={cn("h-5 w-5", active && "scale-110")} />
+  <Icon aria-hidden="true" className={cn("h-5 w-5", active && "scale-110")} />
   <span className={cn("text-[11px] leading-3 mt-1", active && "font-medium")}>{label}</span>
 </Link>
 

@@ -83,9 +83,15 @@ useEffect(() => {
       } catch {
         // user canceled or share failed
       }
-    } else {
-      await copy(link);
-    }
+   } else {
+  try {
+    await navigator.clipboard.writeText(link);
+    alert("copied to clipboard");
+  } catch {
+    // clipboard not available; do nothing
+  }
+}
+
   };
 
   return (

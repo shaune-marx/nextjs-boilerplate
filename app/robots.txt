@@ -1,4 +1,6 @@
 user-agent: *
 allow: /
+disallow: /invite
+disallow: /friends
 
 sitemap: https://todaysplaydate.com/sitemap.xml

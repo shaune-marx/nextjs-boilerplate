@@ -17,6 +17,21 @@ function shuffleStable<T>(arr: T[], seed = 42) {
   return a;
 }
 
+function localKeyFor10amCutover(): string {
+  const now = new Date();
+  let y = now.getFullYear();
+  let m = now.getMonth();
+  let d = now.getDate();
+  if (now.getHours() < 10) {
+    const yday = new Date(y, m, d - 1);
+    y = yday.getFullYear(); m = yday.getMonth(); d = yday.getDate();
+  }
+  const mm = String(m + 1).padStart(2, "0");
+  const dd = String(d).padStart(2, "0");
+  return `${y}-${mm}-${dd}`;
+}
+
+
 export default function FriendsPage() {
   // 20 inputs
   const [names, setNames] = useState<string[]>(
@@ -56,6 +71,22 @@ useEffect(() => {
   setSelected(filled[0] || "");
 }, [filled]);
 
+
+  const sendToday = async () => {
+  if (!selected) return;
+  try {
+    const key = localKeyFor10amCutover();
+    const res = await fetch(`/api/prompt-of-the-day?key=${key}`, { cache: "no-store" });
+    if (!res.ok) throw new Error("failed");
+    const data = await res.json(); // { text: string }
+    const sms = `hey ${selected}! ${data.text}`;
+    window.location.href = `sms:?&body=${encodeURIComponent(sms)}`;
+  } catch {
+    alert("couldn’t fetch today’s prompt — please try again.");
+  }
+};
+
+  
 
   // simple 7-day rotation preview, no repeats if >= 7 names
   const schedule = useMemo(() => {
@@ -139,6 +170,23 @@ useEffect(() => {
   </a>
 </div>
 
+<button
+  onClick={sendToday}
+  style={{
+    padding: "10px 14px",
+    borderRadius: 10,
+    border: "1px solid #000",
+    background: "transparent",
+    fontWeight: 600,
+    cursor: selected ? "pointer" : "default",
+    opacity: selected ? 1 : 0.5,
+  }}
+  disabled={!selected}
+>
+  send to your friend
+</button>
+
+        
         
       </div>
     </main>

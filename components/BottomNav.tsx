@@ -59,15 +59,15 @@ export default function BottomNav({ hiddenPaths = ["/i/"] }: { hiddenPaths?: str
   if (hiddenPaths?.some((p) => pathname?.startsWith(p))) return null;
 
   return (
-    <nav
-      role="navigation"
-      aria-label="Primary"
-      className={cn(
-        "fixed inset-x-0 bottom-0 z-50 border-t",
-        "backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-neutral-900/70",
-        "bg-white dark:bg-neutral-900 md:hidden"
-      )}
-    >
+   <nav
+  role="navigation"
+  aria-label="Primary"
+  className={cn(
+    "fixed inset-x-0 bottom-0 z-50 border-t",
+    "backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-neutral-900/70",
+    "bg-white dark:bg-neutral-900"
+  )}
+>
       <ul
         className={cn(
           "mx-auto grid max-w-screen-sm grid-cols-6",

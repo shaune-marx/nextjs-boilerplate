@@ -54,9 +54,10 @@ const ITEMS = [
   { href: "/terms", label: "terms", Icon: FileIcon },
 ] as const;
 
-export default function BottomNav({ hiddenPaths = ["/i/"] }: { hiddenPaths?: string[] }) {
+export default function BottomNav() 
+ {
   const pathname = usePathname();
-  if (hiddenPaths?.some((p) => pathname?.startsWith(p))) return null;
+
 
   return (
    <nav

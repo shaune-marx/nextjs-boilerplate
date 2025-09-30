@@ -52,7 +52,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body className={`${spaceMono.className} min-h-dvh bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100`} style={{ textTransform: "lowercase" }}>
-        <div className="min-h-dvh pb-24 md:pb-0">
+        <div className="min-h-dvh pb-24">
           {children}
         </div>
 

@@ -55,6 +55,7 @@ export default function RootLayout({
 <footer style={{maxWidth:720, margin:"40px auto 24px", padding:"0 24px", opacity:.8, textTransform:"lowercase"}}>
   <div style={{display:"flex", gap:16, flexWrap:"wrap"}}>
     <a href="mailto:support@todaysplaydate.com" style={{textDecoration:"underline"}}>contact support</a>
+     <a href="/about" style={{textDecoration:"underline"}}>about</a>
     <a href="/privacy" style={{textDecoration:"underline"}}>privacy</a>
     <a href="/terms" style={{textDecoration:"underline"}}>terms</a>
   </div>

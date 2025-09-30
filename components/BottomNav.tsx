@@ -206,91 +206,33 @@ useEffect(() => {
 
       {/* Contact sheet */}
       {contactOpen && (
-        <div
-          ref={sheetRef}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Contact options"
-          className="fixed inset-0 z-[60] flex items-end justify-center"
-        >
-          {/* Backdrop */}
-          <button
-            aria-label="Close"
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setContactOpen(false)}
-          />
-          {/* Sheet */}
-          <div className="w-full max-w-screen-sm rounded-t-2xl bg-white p-4 shadow-lg dark:bg-neutral-900">
-            <div className="mx-auto h-1 w-10 rounded-full bg-neutral-300/80 dark:bg-neutral-700/80 mb-3" />
-            <h2 className="text-center text-base mb-2">contact playdate</h2>
-    <div className="grid gap-2">
-  <a
-    ref={firstContactRef}
-    tabIndex={0}
-    href="mailto:support@todaysplaydate.com"
-    className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
-    onClick={() => setContactOpen(false)}
-  >
-    Open email app
-  </a>
-  <a
-    href="https://mail.google.com/mail/?view=cm&to=support@todaysplaydate.com"
-    className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
-    onClick={() => setContactOpen(false)}
-  >
-
-<button
-  type="button"
-  className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
-  onClick={() => {
-    // Try to open the native Gmail app
-    const gmailScheme = "gmail://co?to=support@todaysplaydate.com";
-    // If the scheme isn't handled, fall back to Gmail web after a short delay
-    const fallback = setTimeout(() => {
-      window.location.href =
-        "https://mail.google.com/mail/?view=cm&to=support@todaysplaydate.com";
-    }, 700);
-
-    // Attempt to open the app scheme
-    window.location.href = gmailScheme;
-
-    // If user interacts and it succeeds, closing the sheet is fine:
-    setTimeout(() => setContactOpen(false), 800);
-  }}
+       
+      
+<div
+  ref={sheetRef}
+  role="dialog"
+  aria-modal="true"
+  aria-label="Contact options"
+  className="fixed inset-0 z-[60] flex items-end justify-center"
 >
-  Open Gmail app
-</button>
-
-    
-    Open Gmail
-  </a>
-  <button
-    type="button"
-    className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
-    onClick={async () => {
-      try {
-        await navigator.clipboard.writeText("support@todaysplaydate.com");
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      } catch {
-        // As a fallback, open a mailto if clipboard isn't available
-        window.location.href = "mailto:support@todaysplaydate.com";
-      }
-    }}
-  >
-    {copied ? "Copied!" : "Copy email address"}
-  </button>
-  <button
-    type="button"
-    className="rounded-lg px-4 py-3 text-center underline opacity-80"
+  {/* Backdrop (z-0) */}
+  <div
+    className="fixed inset-0 bg-black/40 z-0"
+    aria-hidden="true"
     onClick={() => setContactOpen(false)}
-  >
-    Cancel
-  </button>
-  <p className="text-center text-xs opacity-70 mt-1">
-    {copied ? "Email address copied to clipboard." : "\u00A0"}
-  </p>
+  />
+
+  {/* Sheet panel (z-10 so it sits above the backdrop) */}
+  <div className="relative z-10 w-full max-w-screen-sm rounded-t-2xl bg-white p-4 shadow-lg dark:bg-neutral-900">
+    <div className="mx-auto h-1 w-10 rounded-full bg-neutral-300/80 dark:bg-neutral-700/80 mb-3" />
+    <h2 className="text-center text-base mb-2">contact playdate</h2>
+    {/* keep your existing button grid here */}
+    <div className="grid gap-2">
+      {/* ... your links & buttons ... */}
+    </div>
+  </div>
 </div>
+
 
 
           </div>

@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: "32px" }}>
+    <main style={{ minHeight: "100dvh", display: "grid", placeItems: "center", padding: "24px" }}>
       <div style={{ maxWidth: 720, textTransform: "lowercase" }}>
         <div style={{ marginBottom: 16, display: "flex", alignItems: "center", gap: 12 }}>
           <Image

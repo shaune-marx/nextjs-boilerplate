@@ -89,6 +89,9 @@ export default function BottomNav({ hiddenPaths = ["/i/"] }: { hiddenPaths?: str
   rel="noopener noreferrer"
   className={cn(
     "group flex h-full flex-col items-center justify-center rounded-xl transition",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+    "focus-visible:ring-black dark:focus-visible:ring-white",
+    "focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900",
     "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
   )}
 >
@@ -96,14 +99,18 @@ export default function BottomNav({ hiddenPaths = ["/i/"] }: { hiddenPaths?: str
   <span className="text-[11px] leading-3 mt-1">{label}</span>
 </a>
 
+
               ) : (
-              <Link
+           <Link
   href={href}
   aria-label={label}
   aria-current={active ? "page" : undefined}
   title={label}
   className={cn(
     "group flex h-full flex-col items-center justify-center rounded-xl transition",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+    "focus-visible:ring-black dark:focus-visible:ring-white",
+    "focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900",
     active
       ? "text-black dark:text-white"
       : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
@@ -112,6 +119,7 @@ export default function BottomNav({ hiddenPaths = ["/i/"] }: { hiddenPaths?: str
   <Icon className={cn("h-5 w-5", active && "scale-110")} />
   <span className={cn("text-[11px] leading-3 mt-1", active && "font-medium")}>{label}</span>
 </Link>
+
 
               )}
             </li>

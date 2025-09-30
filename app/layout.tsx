@@ -11,7 +11,7 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://todaysplaydate.com"),
   title: {
-    default: "playdate — keep your friends in orbit",
+    default: "playdate — keep your friends in your orbit",
     template: "%s — playdate",
   },
   description:
@@ -31,6 +31,9 @@ export const metadata: Metadata = {
       "we’ll send you one fun question every day, addressed to a friend you want to talk to more often.",
     images: ["/twitter-image.png"],
   },
+  alternates: {
+  canonical: "https://todaysplaydate.com",
+},
 };
 
 export const viewport = {

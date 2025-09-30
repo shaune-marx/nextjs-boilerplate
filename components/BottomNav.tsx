@@ -227,34 +227,47 @@ export default function BottomNav() {
                 Open email app
               </a>
 
-              <button
-                type="button"
-                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
-                onClick={() => {
-                  const gmailScheme = "gmail://co?to=support@todaysplaydate.com";
-                  const fallback = setTimeout(() => {
-                    window.location.href =
-                      "https://mail.google.com/mail/?view=cm&to=support@todaysplaydate.com";
-                  }, 700);
-                  // Attempt to open the app scheme
-                  window.location.href = gmailScheme;
-                  // Close shortly after
-                  setTimeout(() => {
-                    clearTimeout(fallback);
-                    setContactOpen(false);
-                  }, 800);
-                }}
-              >
-                Open Gmail app
-              </button>
+            <button
+  type="button"
+  className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+  onClick={() => {
+    // Try Gmail app compose, then fall back to Gmail web compose
+    const to = "support@todaysplaydate.com";
 
-              <a
-                href="https://mail.google.com/mail/?view=cm&to=support@todaysplaydate.com"
-                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
-                onClick={() => setContactOpen(false)}
-              >
-                Open Gmail
-              </a>
+    // Known schemes: iOS often uses googlegmail://, some Android builds accept gmail://
+    const appSchemes = [
+      `gmail://co?to=${encodeURIComponent(to)}`,
+      `googlegmail://co?to=${encodeURIComponent(to)}`,
+    ];
+
+    let tried = 0;
+    const tryNext = () => {
+      if (tried < appSchemes.length) {
+        const url = appSchemes[tried++];
+        // Attempt to open scheme; if it fails, we’ll fall back shortly
+        window.location.href = url;
+        // After a brief delay, try the next or fall back to web
+        setTimeout(() => {
+          if (tried < appSchemes.length) {
+            tryNext();
+          } else {
+            window.location.href = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(to)}`;
+          }
+        }, 700);
+      }
+    };
+
+    tryNext();
+
+    // Close the sheet a moment later either way
+    setTimeout(() => setContactOpen(false), 900);
+  }}
+>
+  Open Gmail
+</button>
+
+
+           
 
               <button
                 type="button"

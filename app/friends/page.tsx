@@ -115,23 +115,6 @@ useEffect(() => {
         </form>
 
        
-
-<button
-  onClick={sendToday}
-  style={{
-    padding: "10px 14px",
-    borderRadius: 10,
-    border: "1px solid #000",
-    background: "transparent",
-    fontWeight: 600,
-    cursor: selected ? "pointer" : "default",
-    opacity: selected ? 1 : 0.5,
-  }}
-  disabled={!selected}
->
-  send to your friend
-</button>
-
         
         
       </div>

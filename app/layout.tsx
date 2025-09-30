@@ -1,6 +1,9 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Space_Mono } from "next/font/google";
+import BottomNav from "@/components/BottomNav";
+
+
 
 const spaceMono = Space_Mono({
   subsets: ["latin"],
@@ -49,8 +52,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body className={spaceMono.className} style={{ textTransform: "lowercase" }}>
+        <body className="min-h-dvh bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
+            <div className="min-h-dvh pb-24 md:pb-0">
+          {children}
+        </div>
         {children}
 <footer style={{maxWidth:720, margin:"40px auto 24px", padding:"0 24px", opacity:.8, textTransform:"lowercase"}}>
   <div style={{display:"flex", gap:16, flexWrap:"wrap"}}>
@@ -62,6 +69,11 @@ export default function RootLayout({
   <p style={{fontSize:12, marginTop:8}}>© {new Date().getFullYear()} playdate</p>
 </footer>
 
+            <BottomNav />
+      </body>
+    </html>
+  );
+}
         
       </body>
     </html>

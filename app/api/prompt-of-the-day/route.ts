@@ -29,6 +29,15 @@ export async function GET(req: Request) {
   const i = hash(key) % arr.length;
   const item = arr[i];
 
-  return NextResponse.json({ index: i, ...item, date: key });
-}
+  return NextResponse.json(
+  { index: i, ...item, date: key },
+  {
+    headers: {
+      "Cache-Control": "no-store, no-cache, must-revalidate",
+      "Pragma": "no-cache",
+      "Expires": "0",
+    },
+  }
+);
+
 

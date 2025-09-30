@@ -114,6 +114,11 @@ useEffect(() => {
           ))}
         </form>
 
+
+        <p style={{ fontSize: 12, opacity: 0.7, marginBottom: 12 }}>
+  your list saves automatically on this device.
+</p>
+
        
         
         

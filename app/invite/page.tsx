@@ -162,47 +162,22 @@ useEffect(() => {
             {sms}
           </div>
         </div>
+<div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+  <button
+    onClick={shareNative}
+    style={{
+      padding: "10px 14px",
+      borderRadius: 10,
+      border: "1px solid #000",
+      background: "transparent",
+      fontWeight: 600,
+      cursor: "pointer",
+    }}
+  >
+    share
+  </button>
+</div>
 
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <a
-            href={smsHref}
-            style={{
-              padding: "10px 14px",
-              borderRadius: 10,
-              border: "1px solid #000",
-              fontWeight: 600,
-              textDecoration: "none",
-            }}
-          >
-            open messages
-          </a>
-          <button
-            onClick={() => copy(sms)}
-            style={{
-              padding: "10px 14px",
-              borderRadius: 10,
-              border: "1px solid #000",
-              background: "transparent",
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
-          >
-            copy sms
-          </button>
-          <button
-            onClick={shareNative}
-            style={{
-              padding: "10px 14px",
-              borderRadius: 10,
-              border: "1px solid #000",
-              background: "transparent",
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
-          >
-            share
-          </button>
-        </div>
       </div>
     </main>
   );

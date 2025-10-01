@@ -13,6 +13,9 @@ import { useState } from "react";
     outlook: string;
     yahoo: string;
   }>(null);
+
+const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
+
   
   return (
     <main style={{ minHeight: "100dvh", display: "grid", placeItems: "center", padding: "24px" }}>
@@ -33,15 +36,16 @@ import { useState } from "react";
         </p>
 
         <form
- onSubmit={async (e) => {
+onSubmit={async (e) => {
   e.preventDefault();
+  setStatus("idle");
   const form = e.currentTarget as HTMLFormElement;
   const data = new FormData(form);
   const email = String(data.get("email") || "").trim();
   const phone = String(data.get("phone") || "").trim();
 
   if (!email) {
-    alert("please enter your email");
+    setStatus("error");
     return;
   }
 
@@ -54,12 +58,13 @@ import { useState } from "react";
     const json = await res.json();
     if (!res.ok || !json?.ok) throw new Error("failed");
 
-    alert("thanks — you’re on the list!");
+    setStatus("ok");
     form.reset();
   } catch {
-    alert("sorry — something went wrong. please try again.");
+    setStatus("error");
   }
 }}
+
 
   style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 8, flexWrap: "wrap" }}
 >
@@ -116,6 +121,19 @@ import { useState } from "react";
   >
     sign up
   </button>
+
+{status === "ok" && (
+  <p style={{ marginTop: 8, fontSize: 14 }}>
+    thanks — you’re on the list! 🎉
+  </p>
+)}
+{status === "error" && (
+  <p style={{ marginTop: 8, fontSize: 14 }}>
+    sorry — something went wrong. please check your email and try again.
+  </p>
+)}
+
+         
 </form>
 
         {compose && (

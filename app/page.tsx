@@ -66,6 +66,42 @@ import { useState } from "react";
   {/* keep your existing labeled inputs + button exactly as they are */}
   {/* …email label/input… */}
   {/* …phone label/input… */}
+
+<label style={{ display: "block", width: "100%" }}>
+  <span style={{ fontSize: 12, opacity: 0.7, display: "block", marginBottom: 4 }}>
+    email (required)
+  </span>
+  <input
+    id="email"
+    type="email"
+    name="email"
+    required
+    placeholder="your email"
+    autoComplete="email"
+    inputMode="email"
+    autoCapitalize="none"
+    spellCheck={false}
+    style={{ width: "100%", padding: "10px 12px", border: "1px solid #000", borderRadius: 8 }}
+  />
+</label>
+
+<label style={{ display: "block", width: "100%" }}>
+  <span style={{ fontSize: 12, opacity: 0.7, display: "block", marginTop: 8, marginBottom: 4 }}>
+    phone (optional)
+  </span>
+  <input
+    id="phone"
+    type="tel"
+    name="phone"
+    placeholder="your phone"
+    autoComplete="tel"
+    inputMode="tel"
+    pattern="^[0-9+\\-\\s()]{7,}$"
+    style={{ width: "100%", padding: "10px 12px", border: "1px solid #000", borderRadius: 8 }}
+  />
+</label>
+
+         
   <button
     type="submit"
     style={{

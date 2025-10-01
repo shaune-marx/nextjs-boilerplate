@@ -20,9 +20,11 @@ export async function POST(req: Request) {
 
     // send a notification email to you
     try {
-      const result = await resend.emails.send({
-  from: "playdate <onboarding@resend.dev>", // ✅ built-in sender (no domain setup needed)
+
+const result = await resend.emails.send({
+  from: "playdate <notify@send.todaysplaydate.com>", // ✅ use your verified domain
   to: "support@todaysplaydate.com",
+  reply_to: "support@todaysplaydate.com", // (optional) replies go to your main inbox
   subject: "new playdate waitlist signup",
   text: [
     "new waitlist signup:",
@@ -31,6 +33,7 @@ export async function POST(req: Request) {
     `time: ${new Date().toISOString()}`,
   ].filter(Boolean).join("\n"),
 });
+  
 console.log("resend result:", JSON.stringify(result));
 
     } catch (e) {

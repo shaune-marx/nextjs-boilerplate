@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     try {
 
 const result = await resend.emails.send({
-  from: "playdate <notify@send.todaysplaydate.com>", // ✅ use your verified domain
+  from: "playdate <support@todaysplaydate.com>", // ✅ use your verified domain
   to: "support@todaysplaydate.com",
   reply_to: "support@todaysplaydate.com", // (optional) replies go to your main inbox
   subject: "new playdate waitlist signup",

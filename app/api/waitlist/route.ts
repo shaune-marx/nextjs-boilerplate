@@ -32,7 +32,27 @@ const result = await resend.emails.send({
     phone ? `phone (optional): ${phone}` : "",
     `time: ${new Date().toISOString()}`,
   ].filter(Boolean).join("\n"),
-});
+})
+
+      // send a confirmation to the user (optional but nice)
+try {
+  await resend.emails.send({
+    from: "playdate <support@todaysplaydate.com>",
+    to: email, // the user who signed up
+    subject: "you’re on the playdate waitlist ✨",
+    text: [
+      "thanks for signing up for playdate!",
+      "",
+      "we’ll email you when invites open. in the meantime, you can try the demo at:",
+      "https://todaysplaydate.com/invite",
+      "",
+      "— team playdate",
+    ].join("\n"),
+  });
+} catch (e) {
+  console.error("resend confirm error", e);
+};
+
   
 console.log("resend result:", JSON.stringify(result));
 

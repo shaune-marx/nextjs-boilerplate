@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export default function Home() {
  export default function Home() {
   const [compose, setCompose] = useState<null | {
     to: string;
@@ -14,6 +13,7 @@ export default function Home() {
     outlook: string;
     yahoo: string;
   }>(null);
+  
   return (
     <main style={{ minHeight: "100dvh", display: "grid", placeItems: "center", padding: "24px" }}>
       <div style={{ maxWidth: 720, textTransform: "lowercase" }}>

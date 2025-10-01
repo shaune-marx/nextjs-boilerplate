@@ -33,37 +33,34 @@ import { useState } from "react";
         </p>
 
         <form
-  onSubmit={(e) => {
-    e.preventDefault();
-    const form = e.currentTarget as HTMLFormElement;
-    const data = new FormData(form);
-    const email = String(data.get("email") || "").trim();
-    const phone = String(data.get("phone") || "").trim();
+ onSubmit={async (e) => {
+  e.preventDefault();
+  const form = e.currentTarget as HTMLFormElement;
+  const data = new FormData(form);
+  const email = String(data.get("email") || "").trim();
+  const phone = String(data.get("phone") || "").trim();
 
-    const to = "support@todaysplaydate.com";
-    const subject = "playdate early access";
-    const bodyLines = [
-      "please add me to the waitlist.",
-      "",
-      `email: ${email}`,
-      phone ? `phone (optional): ${phone}` : "",
-    ].filter(Boolean);
+  if (!email) {
+    alert("please enter your email");
+    return;
+  }
 
-    const body = bodyLines.join("\n");
+  try {
+    const res = await fetch("/api/waitlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, phone: phone || undefined }),
+    });
+    const json = await res.json();
+    if (!res.ok || !json?.ok) throw new Error("failed");
 
-    // encoded pieces
-    const su = encodeURIComponent(subject);
-    const bo = encodeURIComponent(body);
-    const toEnc = encodeURIComponent(to);
+    alert("thanks — you’re on the list!");
+    form.reset();
+  } catch {
+    alert("sorry — something went wrong. please try again.");
+  }
+}}
 
-    // build links
-    const mailto = `mailto:${to}?subject=${su}&body=${bo}`;
-    const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${toEnc}&su=${su}&body=${bo}`;
-    const outlook = `https://outlook.live.com/owa/?path=/mail/action/compose&to=${toEnc}&subject=${su}&body=${bo}`;
-    const yahoo = `https://compose.mail.yahoo.com/?to=${toEnc}&subject=${su}&body=${bo}`;
-
-    setCompose({ to, subject, body, mailto, gmail, outlook, yahoo });
-  }}
   style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 8, flexWrap: "wrap" }}
 >
   {/* keep your existing labeled inputs + button exactly as they are */}

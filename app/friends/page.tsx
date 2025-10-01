@@ -71,6 +71,18 @@ useEffect(() => {
   setSelected(filled[0] || "");
 }, [filled]);
 
+const [justSaved, setJustSaved] = useState(false);
+
+const saveNow = () => {
+  try {
+    localStorage.setItem("playdate_friends", JSON.stringify(names));
+    setJustSaved(true);
+    setTimeout(() => setJustSaved(false), 1500);
+  } catch {
+    // ignore write errors
+  }
+};
+  
 
   const sendToday = async () => {
   if (!selected) return;
@@ -115,9 +127,23 @@ useEffect(() => {
         </form>
 
 
-        <p style={{ fontSize: 12, opacity: 0.7, marginBottom: 12 }}>
-  your list saves automatically on this device.
-</p>
+       <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 12 }}>
+  <button
+    onClick={saveNow}
+    style={{
+      padding: "10px 14px",
+      borderRadius: 10,
+      border: "1px solid #000",
+      background: "transparent",
+      fontWeight: 600,
+      cursor: "pointer",
+    }}
+  >
+    save
+  </button>
+  {justSaved && <span style={{ fontSize: 12, opacity: 0.7 }}>saved ✓</span>}
+</div>
+
 
        
         

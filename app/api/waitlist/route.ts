@@ -20,19 +20,19 @@ export async function POST(req: Request) {
 
     // send a notification email to you
     try {
-      await resend.emails.send({
-        from: "playdate <notifications@resend.dev>", // this can be any verified sender in Resend
-        to: "support@todaysplaydate.com",            // change if you prefer a different inbox
-        subject: "new playdate waitlist signup",
-        text: [
-          "new waitlist signup:",
-          `email: ${email}`,
-          phone ? `phone (optional): ${phone}` : "",
-          `time: ${new Date().toISOString()}`,
-        ]
-          .filter(Boolean)
-          .join("\n"),
-      });
+      const result = await resend.emails.send({
+  from: "playdate <onboarding@resend.dev>", // ✅ built-in sender (no domain setup needed)
+  to: "support@todaysplaydate.com",
+  subject: "new playdate waitlist signup",
+  text: [
+    "new waitlist signup:",
+    `email: ${email}`,
+    phone ? `phone (optional): ${phone}` : "",
+    `time: ${new Date().toISOString()}`,
+  ].filter(Boolean).join("\n"),
+});
+console.log("resend result:", JSON.stringify(result));
+
     } catch (e) {
       // don't fail the signup just because email send failed
       console.error("resend error", e);

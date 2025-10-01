@@ -15,6 +15,7 @@ import { useState } from "react";
   }>(null);
 
 const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
+const [loading, setLoading] = useState(false);
 
   
   return (
@@ -38,7 +39,10 @@ const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
         <form
 onSubmit={async (e) => {
   e.preventDefault();
+  if (loading) return;
+  setLoading(true);
   setStatus("idle");
+
   const form = e.currentTarget as HTMLFormElement;
   const data = new FormData(form);
   const email = String(data.get("email") || "").trim();
@@ -46,6 +50,7 @@ onSubmit={async (e) => {
 
   if (!email) {
     setStatus("error");
+    setLoading(false);
     return;
   }
 
@@ -62,8 +67,11 @@ onSubmit={async (e) => {
     form.reset();
   } catch {
     setStatus("error");
+  } finally {
+    setLoading(false);
   }
 }}
+
 
 
   style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 8, flexWrap: "wrap" }}
@@ -107,20 +115,23 @@ onSubmit={async (e) => {
 </label>
 
          
-  <button
-    type="submit"
-    style={{
-      padding: "12px 18px",
-      borderRadius: 10,
-      textDecoration: "none",
-      border: "1px solid #000",
-      fontWeight: 600,
-      background: "transparent",
-      cursor: "pointer",
-    }}
-  >
-    sign up
-  </button>
+<button
+  type="submit"
+  disabled={loading}
+  style={{
+    padding: "12px 18px",
+    borderRadius: 10,
+    textDecoration: "none",
+    border: "1px solid #000",
+    fontWeight: 600,
+    background: "transparent",
+    cursor: loading ? "default" : "pointer",
+    opacity: loading ? 0.6 : 1,
+  }}
+>
+  {loading ? "signing up…" : "sign up"}
+</button>
+
 
 {status === "ok" && (
   <p style={{ marginTop: 8, fontSize: 14 }}>

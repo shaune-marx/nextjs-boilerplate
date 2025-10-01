@@ -97,7 +97,7 @@ useEffect(() => {
 
         <form
           onSubmit={(e) => e.preventDefault()}
-          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 16 }}
+          style={{ display: "grid", gridTemplateColumns: "1fr", gap: 8, marginBottom: 16 }}
         >
           {names.map((val, i) => (
             <input

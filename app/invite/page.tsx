@@ -109,14 +109,17 @@ function InviteInner() {
         }}
       >
         <img
-          src="/logo-playdate.svg"
+          src="/playdate-logo.png"
           alt="playdate"
-          width={160}
-          height={40}
+          width={320}
+          height={86}
+          priority
           style={{ display: "block" }}
         />
       </div>
 
+
+      
       <div
         style={{
           width: "100%",

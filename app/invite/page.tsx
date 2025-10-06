@@ -184,8 +184,18 @@ function InviteInner() {
 
           <div style={{ marginBottom: 12 }}>
             <div style={{ fontSize: 14, opacity: 0.7 }}>friend of the day</div>
-            <input
-              value={friend}
-              onChange={(e) => setFriend(e.target.value)}
-              aria-label="frien
+          <input
+  value={friend}
+  onChange={(e) => setFriend(e.target.value)}
+  aria-label="friend name"
+  placeholder={friends.length ? "friend of the day" : "add friends on /friends"}
+  style={{
+    width: "100%",
+    marginTop: 6,
+    padding: "10px 12px",
+    border: "1px solid #000",
+    borderRadius: 8,
+  }}
+/>
+
 

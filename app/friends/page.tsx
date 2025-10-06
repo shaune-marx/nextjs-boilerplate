@@ -100,7 +100,15 @@ const saveNow = () => {
 
 
   return (
-    <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}>
+   <main
+  style={{
+    minHeight: "100dvh",
+    display: "grid",
+    placeItems: "center",
+    padding: "24px",
+    background: "#fff",
+  }}
+>
       <div style={{ width: "100%", maxWidth: 720, textTransform: "lowercase" }}>
         <h1 style={{ fontSize: 28, marginBottom: 8 }}>friends</h1>
         <p style={{ opacity: 0.8, marginBottom: 16 }}>

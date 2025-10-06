@@ -5,6 +5,21 @@
   --foreground: #171717;
 }
 
+/* Force light canvas regardless of the user's dark mode */
+html, body {
+  background: #fff !important;
+  color: #000;
+}
+
+/* Just in case the browser tries to invert in dark mode */
+@media (prefers-color-scheme: dark) {
+  html, body {
+    background: #fff !important;
+    color: #000;
+  }
+}
+
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

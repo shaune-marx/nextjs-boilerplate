@@ -1,10 +1,23 @@
 "use client";
 
 import Image from "next/image";
-import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo, useState } from "react";
+
+// If you use useSearchParams elsewhere, you can keep it—but we remove ?f dependence now.
+// import { useSearchParams } from "next/navigation";
 
 type Pod = { index: number; text: string; type: string; date: string };
+
+const FRIENDS_KEY = "playdate:friends"; // array of strings
+
+// simple stable hash of a string → integer
+function hash(s: string) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = (h * 31 + s.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h);
+}
 
 function localKeyFor10amCutover(): string {
   const now = new Date(); // user's local time
@@ -25,13 +38,57 @@ function localKeyFor10amCutover(): string {
   return `${y}-${mm}-${dd}`; // YYYY-MM-DD
 }
 
-function InviteInner() {
-  const search = useSearchParams();
+function readFriends(): string[] {
+  try {
+    const raw = localStorage.getItem(FRIENDS_KEY);
+    if (!raw) return [];
+    const arr = JSON.parse(raw);
+    if (Array.isArray(arr)) {
+      return arr
+        .map((v) => (typeof v === "string" ? v.trim() : ""))
+        .filter((v) => v.length > 0);
+    }
+    return [];
+  } catch {
+    return [];
+  }
+}
 
-  const initialFriend = (search.get("f") || "").trim();
-  const [friend, setFriend] = useState(initialFriend);
+function selectFriendOfDay(friends: string[], dateKey: string): string {
+  if (!friends.length) return "";
+  const i = hash(`friend|${dateKey}`) % friends.length;
+  return friends[i];
+}
+
+function InviteInner() {
+  // const search = useSearchParams(); // no longer needed for friend selection
+  const [friends, setFriends] = useState<string[]>([]);
+  const [friend, setFriend] = useState<string>("");
+
   const [pod, setPod] = useState<Pod | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const dateKey = useMemo(() => localKeyFor10amCutover(), []);
+
+  // Load friends and compute friend-of-the-day on mount
+  useEffect(() => {
+    const list = readFriends();
+    setFriends(list);
+    setFriend(selectFriendOfDay(list, dateKey));
+  }, [dateKey]);
+
+  // React to changes coming from /friends (or another tab)
+  useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      if (e.key === FRIENDS_KEY) {
+        const list = readFriends();
+        setFriends(list);
+        setFriend(selectFriendOfDay(list, dateKey));
+      }
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, [dateKey]);
 
   // fetch the prompt-of-the-day for the local day (10:00 am cutover)
   useEffect(() => {
@@ -39,7 +96,7 @@ function InviteInner() {
     (async () => {
       try {
         setLoading(true);
-        const key = localKeyFor10amCutover();
+        const key = dateKey;
         const res = await fetch(`/api/prompt-of-the-day?key=${key}`, { cache: "no-store" });
         const data = (await res.json()) as Pod;
         if (mounted) setPod(data);
@@ -52,25 +109,16 @@ function InviteInner() {
     return () => {
       mounted = false;
     };
-  }, []);
-
-  // keep URL updated with friend for shareability
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("f", friend);
-    window.history.replaceState(null, "", url.toString());
-  }, [friend]);
+  }, [dateKey]);
 
   const text = pod?.text ?? "";
-  const sms = `hey ${friend}! ${text}`;
+  const sms = `hey ${friend || "friend"}! ${text}`;
 
   const shareNative = async () => {
-    const url = new URL(window.location.origin + "/invite");
-    url.searchParams.set("f", friend);
-    const link = url.toString();
-
+    // Share the invite link; the friend is implied by daily selection on load
+    const link = new URL(window.location.origin + "/invite").toString();
     const title = "playdate — invitation to play";
-    const textToShare = `hey ${friend}! ${text}`;
+    const textToShare = sms;
 
     if (navigator.share) {
       try {
@@ -125,7 +173,7 @@ function InviteInner() {
               value={friend}
               onChange={(e) => setFriend(e.target.value)}
               aria-label="friend name"
-              placeholder="friend name"
+              placeholder={friends.length ? "friend of the day" : "add friends on /friends"}
               style={{
                 width: "100%",
                 marginTop: 6,
@@ -134,6 +182,11 @@ function InviteInner() {
                 borderRadius: 8,
               }}
             />
+            {!friends.length && (
+              <div style={{ fontSize: 12, opacity: 0.6, marginTop: 6 }}>
+                no friends found — go to <a href="/friends">/friends</a> to add some
+              </div>
+            )}
           </div>
 
           <div style={{ marginBottom: 12 }}>

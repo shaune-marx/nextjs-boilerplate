@@ -3,12 +3,10 @@
 import Image from "next/image";
 import { Suspense, useEffect, useMemo, useState } from "react";
 
-// If you use useSearchParams elsewhere, you can keep it—but we remove ?f dependence now.
-// import { useSearchParams } from "next/navigation";
-
 type Pod = { index: number; text: string; type: string; date: string };
 
-const FRIENDS_KEY = "playdate:friends"; // array of strings
+// LocalStorage keys we will try in order:
+const FRIEND_KEYS = ["playdate:friends", "playdate_friends", "friends", "friendsList"] as const;
 
 // simple stable hash of a string → integer
 function hash(s: string) {
@@ -38,20 +36,38 @@ function localKeyFor10amCutover(): string {
   return `${y}-${mm}-${dd}`; // YYYY-MM-DD
 }
 
+/** Try to read friends from several known keys and shapes */
 function readFriends(): string[] {
   try {
-    const raw = localStorage.getItem(FRIENDS_KEY);
-    if (!raw) return [];
-    const arr = JSON.parse(raw);
-    if (Array.isArray(arr)) {
-      return arr
-        .map((v) => (typeof v === "string" ? v.trim() : ""))
-        .filter((v) => v.length > 0);
+    for (const key of FRIEND_KEYS) {
+      const raw = localStorage.getItem(key);
+      if (!raw) continue;
+      const parsed = JSON.parse(raw);
+
+      // Case 1: Array of strings
+      if (Array.isArray(parsed) && parsed.every((v) => typeof v === "string")) {
+        return parsed.map((v) => v.trim()).filter(Boolean);
+      }
+
+      // Case 2: Array of objects with "name"
+      if (
+        Array.isArray(parsed) &&
+        parsed.every((v) => v && typeof v === "object" && ("name" in v || "fullName" in v))
+      ) {
+        return parsed
+          .map((v) => {
+            // prefer "name", fallback to "fullName" or any common field
+            const name =
+              (v.name ?? v.fullName ?? v.displayName ?? v.title ?? "").toString().trim();
+            return name;
+          })
+          .filter(Boolean);
+      }
     }
-    return [];
   } catch {
-    return [];
+    /* ignore */
   }
+  return [];
 }
 
 function selectFriendOfDay(friends: string[], dateKey: string): string {
@@ -61,7 +77,6 @@ function selectFriendOfDay(friends: string[], dateKey: string): string {
 }
 
 function InviteInner() {
-  // const search = useSearchParams(); // no longer needed for friend selection
   const [friends, setFriends] = useState<string[]>([]);
   const [friend, setFriend] = useState<string>("");
 
@@ -77,10 +92,11 @@ function InviteInner() {
     setFriend(selectFriendOfDay(list, dateKey));
   }, [dateKey]);
 
-  // React to changes coming from /friends (or another tab)
+  // If /friends updates localStorage in another tab/window, re-select
   useEffect(() => {
     const handler = (e: StorageEvent) => {
-      if (e.key === FRIENDS_KEY) {
+      if (e.storageArea !== localStorage) return;
+      if (!e.key || FRIEND_KEYS.includes(e.key as any)) {
         const list = readFriends();
         setFriends(list);
         setFriend(selectFriendOfDay(list, dateKey));
@@ -96,8 +112,7 @@ function InviteInner() {
     (async () => {
       try {
         setLoading(true);
-        const key = dateKey;
-        const res = await fetch(`/api/prompt-of-the-day?key=${key}`, { cache: "no-store" });
+        const res = await fetch(`/api/prompt-of-the-day?key=${dateKey}`, { cache: "no-store" });
         const data = (await res.json()) as Pod;
         if (mounted) setPod(data);
       } catch {
@@ -115,7 +130,7 @@ function InviteInner() {
   const sms = `hey ${friend || "friend"}! ${text}`;
 
   const shareNative = async () => {
-    // Share the invite link; the friend is implied by daily selection on load
+    // Share the invite link; friend is re-selected on load per day
     const link = new URL(window.location.origin + "/invite").toString();
     const title = "playdate — invitation to play";
     const textToShare = sms;
@@ -172,86 +187,5 @@ function InviteInner() {
             <input
               value={friend}
               onChange={(e) => setFriend(e.target.value)}
-              aria-label="friend name"
-              placeholder={friends.length ? "friend of the day" : "add friends on /friends"}
-              style={{
-                width: "100%",
-                marginTop: 6,
-                padding: "10px 12px",
-                border: "1px solid #000",
-                borderRadius: 8,
-              }}
-            />
-            {!friends.length && (
-              <div style={{ fontSize: 12, opacity: 0.6, marginTop: 6 }}>
-                no friends found — go to <a href="/friends">/friends</a> to add some
-              </div>
-            )}
-          </div>
-
-          <div style={{ marginBottom: 12 }}>
-            <div style={{ fontSize: 14, opacity: 0.7 }}>
-              prompt of the day{pod?.date ? ` — ${pod.date}` : ""}
-            </div>
-            <div
-              style={{
-                width: "100%",
-                marginTop: 6,
-                padding: "10px 12px",
-                border: "1px solid #000",
-                borderRadius: 8,
-                background: "#f9f9f9",
-                whiteSpace: "pre-wrap",
-                minHeight: 72,
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              {loading ? "loading…" : text}
-            </div>
-          </div>
-
-          <div style={{ marginBottom: 12 }}>
-            <div style={{ fontSize: 14, opacity: 0.7 }}>suggested sms</div>
-            <div
-              style={{
-                border: "1px dashed #000",
-                borderRadius: 8,
-                padding: 12,
-                background: "#f9f9f9",
-                whiteSpace: "pre-wrap",
-              }}
-            >
-              {sms}
-            </div>
-          </div>
-
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            <button
-              onClick={shareNative}
-              style={{
-                padding: "10px 14px",
-                borderRadius: 10,
-                border: "1px solid #000",
-                background: "transparent",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              share
-            </button>
-          </div>
-        </div>
-      </div>
-    </main>
-  );
-}
-
-export default function InvitePage() {
-  return (
-    <Suspense fallback={null}>
-      <InviteInner />
-    </Suspense>
-  );
-}
+              aria-label="frien
 

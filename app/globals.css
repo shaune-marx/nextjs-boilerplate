@@ -64,3 +64,18 @@ a:hover {
 }
 
 }
+
+/* Force light canvas regardless of the user's dark mode */
+html, body {
+  background: #ffffff !important;
+  color: #000000;
+}
+
+/* Prevent automatic dark-mode inversion on supporting browsers */
+@media (prefers-color-scheme: dark) {
+  html, body {
+    background: #ffffff !important;
+    color: #000000;
+  }
+}
+

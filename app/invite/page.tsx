@@ -113,7 +113,6 @@ function InviteInner() {
           alt="playdate"
           width={320}
           height={86}
-          priority
           style={{ display: "block" }}
         />
       </div>

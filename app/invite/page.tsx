@@ -157,7 +157,16 @@ function InviteInner() {
   };
 
   return (
-    <main style={{ minHeight: "100dvh", display: "grid", placeItems: "center", padding: "24px" }}>
+<main
+  style={{
+    minHeight: "100dvh",
+    display: "grid",
+    placeItems: "center",
+    padding: "24px",
+    background: "#fff", // force white canvas
+  }}
+>
+
       <div style={{ maxWidth: 720, textTransform: "lowercase", width: "100%" }}>
         {/* Logo block (same as app/page.tsx) */}
         <div style={{ marginBottom: 16, display: "flex", alignItems: "center", gap: 12 }}>

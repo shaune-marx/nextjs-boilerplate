@@ -49,19 +49,24 @@ function readFriends(): string[] {
         return parsed.map((v) => v.trim()).filter(Boolean);
       }
 
-      // Case 2: Array of objects with "name"
+      // Case 2: Array of objects with "name", "fullName", etc.
       if (
         Array.isArray(parsed) &&
-        parsed.every((v) => v && typeof v === "object" && ("name" in v || "fullName" in v))
+        parsed.every((v) => v && typeof v === "object")
       ) {
-        return parsed
+        const names = parsed
           .map((v) => {
-            // prefer "name", fallback to "fullName" or any common field
+            const anyObj = v as Record<string, unknown>;
             const name =
-              (v.name ?? v.fullName ?? v.displayName ?? v.title ?? "").toString().trim();
-            return name;
+              (anyObj.name ??
+                anyObj.fullName ??
+                anyObj.displayName ??
+                anyObj.title ??
+                "") as string;
+            return (name ?? "").toString().trim();
           })
           .filter(Boolean);
+        if (names.length) return names;
       }
     }
   } catch {
@@ -96,7 +101,7 @@ function InviteInner() {
   useEffect(() => {
     const handler = (e: StorageEvent) => {
       if (e.storageArea !== localStorage) return;
-      if (!e.key || FRIEND_KEYS.includes(e.key as any)) {
+      if (!e.key || (FRIEND_KEYS as readonly string[]).includes(e.key)) {
         const list = readFriends();
         setFriends(list);
         setFriend(selectFriendOfDay(list, dateKey));
@@ -184,18 +189,88 @@ function InviteInner() {
 
           <div style={{ marginBottom: 12 }}>
             <div style={{ fontSize: 14, opacity: 0.7 }}>friend of the day</div>
-          <input
-  value={friend}
-  onChange={(e) => setFriend(e.target.value)}
-  aria-label="friend name"
-  placeholder={friends.length ? "friend of the day" : "add friends on /friends"}
-  style={{
-    width: "100%",
-    marginTop: 6,
-    padding: "10px 12px",
-    border: "1px solid #000",
-    borderRadius: 8,
-  }}
-/>
+            <input
+              value={friend}
+              onChange={(e) => setFriend(e.target.value)}
+              aria-label="friend name"
+              placeholder={friends.length ? "friend of the day" : "add friends on /friends"}
+              style={{
+                width: "100%",
+                marginTop: 6,
+                padding: "10px 12px",
+                border: "1px solid #000",
+                borderRadius: 8,
+              }}
+            />
+            {!friends.length && (
+              <div style={{ fontSize: 12, opacity: 0.6, marginTop: 6 }}>
+                no friends found — go to <a href="/friends">/friends</a> to add some
+              </div>
+            )}
+          </div>
 
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 14, opacity: 0.7 }}>
+              prompt of the day{pod?.date ? ` — ${pod.date}` : ""}
+            </div>
+            <div
+              style={{
+                width: "100%",
+                marginTop: 6,
+                padding: "10px 12px",
+                border: "1px solid #000",
+                borderRadius: 8,
+                background: "#f9f9f9",
+                whiteSpace: "pre-wrap",
+                minHeight: 72,
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {loading ? "loading…" : text}
+            </div>
+          </div>
 
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 14, opacity: 0.7 }}>suggested sms</div>
+            <div
+              style={{
+                border: "1px dashed #000",
+                borderRadius: 8,
+                padding: 12,
+                background: "#f9f9f9",
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              {sms}
+            </div>
+          </div>
+
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <button
+              onClick={shareNative}
+              style={{
+                padding: "10px 14px",
+                borderRadius: 10,
+                border: "1px solid #000",
+                background: "transparent",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              share
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export default function InvitePage() {
+  return (
+    <Suspense fallback={null}>
+      <InviteInner />
+    </Suspense>
+  );
+}

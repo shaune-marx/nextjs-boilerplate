@@ -1,7 +1,7 @@
 [
   {
     "text": "send a picture that could have this caption: highlight of my week",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what’s your least favorite job you’ve ever had?",
@@ -9,7 +9,7 @@
   },
   {
     "text": "send a picture that could have this caption: living the dream",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what’s the worst joke you know?",
@@ -21,7 +21,7 @@
   },
   {
     "text": "send a picture that could have this caption: made this with my own 2 hands",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what’s your most-used catchphrase?",
@@ -41,7 +41,7 @@
   },
   {
     "text": "send a picture that could have this caption: interior design is my passion",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "if you could remove one thing from Earth, what would it be?",
@@ -57,15 +57,15 @@
   },
   {
     "text": "send a picture that could have this caption: take all my money",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: currently reading",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: #tbt",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "if you could instantly gain any skill, what would you choose?",
@@ -81,7 +81,7 @@
   },
   {
     "text": "send a picture that could have this caption: 666 with a princess streak",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "if every job paid $1 million a year, what would you do?",
@@ -93,7 +93,7 @@
   },
   {
     "text": "send a picture that could have this caption: I don’t think we’re in Kansas anymore",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "which trivia category are you best at?",
@@ -145,7 +145,7 @@
   },
   {
     "text": "send a picture that could have this caption: what dreams are made of",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what’s something you know how to do that most people don’t?",
@@ -153,11 +153,11 @@
   },
   {
     "text": "send a picture that could have this caption: proudest moment of my life",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: oops I did it again",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what’s something that should be acceptable, but isn’t?",
@@ -165,7 +165,7 @@
   },
   {
     "text": "send a picture that could have this caption: an icon",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what’s one subject you know everything about?",
@@ -181,7 +181,7 @@
   },
   {
     "text": "send a picture that could have this caption: she's beauty and she's grace",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what’s the first lie you remember telling?",
@@ -205,11 +205,11 @@
   },
   {
     "text": "send a picture that could have this caption: frame this for your mantle",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: aliens could study this to understand humanity",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "if you had to eat one meal every day for the rest of your life, what would it be?",
@@ -221,7 +221,7 @@
   },
   {
     "text": "send a picture that could have this caption: high art/low art",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what’s a common saying that annoys you?",
@@ -229,7 +229,7 @@
   },
   {
     "text": "send a picture that could have this caption: bury me here",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what’s your best piece of family lore?",
@@ -237,7 +237,7 @@
   },
   {
     "text": "send a picture that could have this caption: it's the little things",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "if you had to write a TV show, what would you choose for the genre, setting, and premise?",
@@ -245,11 +245,11 @@
   },
   {
     "text": "send a picture that could have this caption: killing me slowly",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: heaven is a place on Earth",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "if you could have either a time machine that traveled between the past and the present OR the future and the present, which would you choose?",
@@ -257,7 +257,7 @@
   },
   {
     "text": "send me your most recent screenshot and explain it to me",
-    "type": "other"
+    "type": "question"
   },
   {
     "text": "what video have you watched 50,000 times and it always makes you laugh?",
@@ -277,7 +277,7 @@
   },
   {
     "text": "send a picture that could have this caption: oil on canvas, 2025",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what national holiday would you add to the calendar?",
@@ -285,27 +285,27 @@
   },
   {
     "text": "send a picture that could have this caption: me, as an inanimate object",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: I spent way too long on this",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: a thing of beauty",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: in this economy?",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: could eat this every day for the rest of my life",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: avant-garde",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what's been the biggest plot twist of your life so far?",
@@ -313,11 +313,11 @@
   },
   {
     "text": "send a picture that could have this caption: only God can judge me",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: I’ll have what she’s having",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "which actor do you think played a role so well you have a hard time seeing them as anything else?",
@@ -325,7 +325,7 @@
   },
   {
     "text": "send a picture that could have this caption: the cover of my memoir",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "if you could have any superpower, except invisibility, teleportation, or flying, what would you choose?",
@@ -341,7 +341,7 @@
   },
   {
     "text": "send a picture that could have this caption: in a fire I’d go back for this",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "if you could wake up tomorrow and be the best in the world at one thing, what would you choose?",
@@ -357,11 +357,11 @@
   },
   {
     "text": "send a picture that could have this caption: this belongs in a museum",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: there’s a story here",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what’s something that can immediately ruin your day?",
@@ -373,7 +373,7 @@
   },
   {
     "text": "send a picture that could have this caption: if I go missing, use this photo",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "which cartoon character most resembles you (looks or personality)?",
@@ -381,7 +381,7 @@
   },
   {
     "text": "send a picture that could have this caption: if I were a cartoon character with only one outfit, it would be this",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "if you could pick 2 people you know to be your parents in the next life, who would you choose?",
@@ -405,19 +405,19 @@
   },
   {
     "text": "send a picture that could have this caption: gang’s all here",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: my latest obsession",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: I contain multitudes",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send the most recent selfie you took and explain the context",
-    "type": "other"
+    "type": "question"
   },
   {
     "text": "who do you think is the most annoying fictional character?",
@@ -425,7 +425,7 @@
   },
   {
     "text": "send a picture that could have this caption: my most prized possession",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "who was your first crush?",
@@ -437,7 +437,7 @@
   },
   {
     "text": "send me the most recent video you took and explain the context",
-    "type": "other"
+    "type": "question"
   },
   {
     "text": "who’s the most famous person you’ve ever met?",
@@ -457,7 +457,7 @@
   },
   {
     "text": "send a picture that could have this caption: Vogue (strike a pose)",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what’s your most useless skill?",
@@ -485,7 +485,7 @@
   },
   {
     "text": "send a picture that could have this caption: some people wait a lifetime for a moment like this",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what’s been taking up all of your brain space lately?",
@@ -509,11 +509,11 @@
   },
   {
     "text": "send a picture that could have this caption: Ansel Adams who?",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: easy, breezy, beautiful (Covergirl)",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what was your favorite toy as a child?",
@@ -521,11 +521,11 @@
   },
   {
     "text": "send a picture that could have this caption: my whole heart",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "send a picture that could have this caption: my muse",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what simple pleasure do you most look forward to?",
@@ -541,7 +541,7 @@
   },
   {
     "text": "send a picture that could have this caption: in my natural habitat",
-    "type": "photo_caption"
+    "type": "picture question"
   },
   {
     "text": "what’s a piece of conventional wisdom you don't agree with?",
@@ -553,7 +553,7 @@
   },
   {
     "text": "which one would you rather live without in your home: washing machine, dishwasher, or television?",
-    "type": "would_you_rather"
+    "type": "question"
   },
   {
     "text": "what scene from a movie or show terrified you as a child?",
@@ -562,85 +562,5 @@
   {
     "text": "what's your earliest memory?",
     "type": "question"
-  },
-  {
-    "text": "send a picture that could have this caption: a moment of bliss",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: natural habitat",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: caught red-handed",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: in a fire I’d go back for",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: my everything",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: bad idea right?",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: OOO",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: most recent selfie",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: too good to be true",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: model behavior",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: it’s fine, I’m fine",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: prized possession",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: this isn’t what it looks like",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: this photo is haunted",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: mind your business",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: save some for the fishes",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: the cover of my coffee table book",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: Van Gogh who?",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: gotta go",
-    "type": "photo_caption"
-  },
-  {
-    "text": "send a picture that could have this caption: do you ever feel like a plastic bag drifting through the wind",
-    "type": "photo_caption"
   }
 ]

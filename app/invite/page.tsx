@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 
 type Pod = { index: number; text: string; type: string; date: string };
 
-
 function localKeyFor10amCutover(): string {
   const now = new Date(); // user's local time
   let y = now.getFullYear();
@@ -25,7 +24,6 @@ function localKeyFor10amCutover(): string {
   return `${y}-${mm}-${dd}`; // YYYY-MM-DD
 }
 
-
 function InviteInner() {
   const search = useSearchParams();
 
@@ -34,30 +32,28 @@ function InviteInner() {
   const [pod, setPod] = useState<Pod | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // fetch the prompt-of-the-day (same for everyone, based on UTC date)
   // fetch the prompt-of-the-day for the local day (10:00 am cutover)
-useEffect(() => {
-  let mounted = true;
-  (async () => {
-    try {
-      setLoading(true);
-      const key = localKeyFor10amCutover(); // ← uses the helper you added
-      const res = await fetch(`/api/prompt-of-the-day?key=${key}`, { cache: "no-store" });
-      const data = (await res.json()) as Pod;
-      if (mounted) setPod(data);
-    } catch {
-      if (mounted) setPod(null);
-    } finally {
-      if (mounted) setLoading(false);
-    }
-  })();
-  return () => {
-    mounted = false;
-  };
-}, []);
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        setLoading(true);
+        const key = localKeyFor10amCutover();
+        const res = await fetch(`/api/prompt-of-the-day?key=${key}`, { cache: "no-store" });
+        const data = (await res.json()) as Pod;
+        if (mounted) setPod(data);
+      } catch {
+        if (mounted) setPod(null);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
-
-  // keep URL updated with friend for shareability (no index param anymore)
+  // keep URL updated with friend for shareability
   useEffect(() => {
     const url = new URL(window.location.href);
     url.searchParams.set("f", friend);
@@ -66,8 +62,6 @@ useEffect(() => {
 
   const text = pod?.text ?? "";
   const sms = `hey ${friend}! ${text}`;
- 
-
 
   const shareNative = async () => {
     const url = new URL(window.location.origin + "/invite");
@@ -83,19 +77,46 @@ useEffect(() => {
       } catch {
         // user canceled or share failed
       }
-   } else {
-  try {
-    await navigator.clipboard.writeText(link);
-    alert("copied to clipboard");
-  } catch {
-    // clipboard not available; do nothing
-  }
-}
-
+    } else {
+      try {
+        await navigator.clipboard.writeText(link);
+        alert("copied to clipboard");
+      } catch {
+        // clipboard not available; do nothing
+      }
+    }
   };
 
   return (
-    <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}>
+    <main
+      style={{
+        minHeight: "100vh",
+        display: "grid",
+        placeItems: "center",
+        padding: 24,
+      }}
+    >
+      {/* Top-of-page logo */}
+      <div
+        style={{
+          position: "fixed",
+          top: 16,
+          left: 0,
+          right: 0,
+          display: "grid",
+          placeItems: "center",
+          pointerEvents: "none",
+        }}
+      >
+        <img
+          src="/logo-playdate.svg"
+          alt="playdate"
+          width={160}
+          height={40}
+          style={{ display: "block" }}
+        />
+      </div>
+
       <div
         style={{
           width: "100%",
@@ -108,6 +129,11 @@ useEffect(() => {
           textTransform: "lowercase",
         }}
       >
+        {/* Title above the box */}
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: 18, fontWeight: 700 }}>today&apos;s playdate:</div>
+        </div>
+
         <div style={{ marginBottom: 12 }}>
           <div style={{ fontSize: 14, opacity: 0.7 }}>friend of the day</div>
           <input
@@ -161,22 +187,22 @@ useEffect(() => {
             {sms}
           </div>
         </div>
-<div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-  <button
-    onClick={shareNative}
-    style={{
-      padding: "10px 14px",
-      borderRadius: 10,
-      border: "1px solid #000",
-      background: "transparent",
-      fontWeight: 600,
-      cursor: "pointer",
-    }}
-  >
-    share
-  </button>
-</div>
 
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <button
+            onClick={shareNative}
+            style={{
+              padding: "10px 14px",
+              borderRadius: 10,
+              border: "1px solid #000",
+              background: "transparent",
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            share
+          </button>
+        </div>
       </div>
     </main>
   );

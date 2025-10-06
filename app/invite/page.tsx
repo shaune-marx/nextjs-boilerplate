@@ -87,37 +87,6 @@ function InviteInner() {
     }
   };
 
-  return (
-    <main
-      style={{
-        minHeight: "100vh",
-        display: "grid",
-        placeItems: "center",
-        padding: 24,
-      }}
-    >
-      {/* Top-of-page logo */}
-      <div
-        style={{
-          position: "fixed",
-          top: 16,
-          left: 0,
-          right: 0,
-          display: "grid",
-          placeItems: "center",
-          pointerEvents: "none",
-        }}
-      >
-        <img
-          src="/playdate-logo.png"
-          alt="playdate"
-          width={320}
-          height={86}
-          style={{ display: "block" }}
-        />
-      </div>
-
-
       
       <div
         style={{

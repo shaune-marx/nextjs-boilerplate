@@ -36,6 +36,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://todaysplaydate.com",
   },
+  themeColor: "#ffffff",
 };
 
 export const viewport = {
@@ -47,18 +48,25 @@ export const viewport = {
 export default function RootLayout({
   children,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en" className="h-full">
-      <body className={`${spaceMono.className} min-h-dvh bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100`} style={{ textTransform: "lowercase" }}>
+      <head>
+        <meta name="color-scheme" content="light" />
+        <meta name="theme-color" content="#ffffff" />
+      </head>
+      <body
+        className={`${spaceMono.className} min-h-dvh bg-white text-neutral-900`}
+        style={{ textTransform: "lowercase" }}
+      >
         <div className="min-h-dvh pb-24">
           {children}
         </div>
-
         <BottomNav />
       </body>
     </html>
   );
 }
+
 

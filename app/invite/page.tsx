@@ -50,10 +50,7 @@ function readFriends(): string[] {
       }
 
       // Case 2: Array of objects with "name", "fullName", etc.
-      if (
-        Array.isArray(parsed) &&
-        parsed.every((v) => v && typeof v === "object")
-      ) {
+      if (Array.isArray(parsed) && parsed.every((v) => v && typeof v === "object")) {
         const names = parsed
           .map((v) => {
             const anyObj = v as Record<string, unknown>;
@@ -88,7 +85,15 @@ function InviteInner() {
   const [pod, setPod] = useState<Pod | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // new: user's typed answer + modal visibility
+  const [answer, setAnswer] = useState<string>("");
+  const [showModal, setShowModal] = useState<boolean>(false);
+
   const dateKey = useMemo(() => localKeyFor10amCutover(), []);
+  const displayDate = useMemo(() => {
+    const [y, m, d] = dateKey.split("-");
+    return `${m}-${d}-${y}`;
+  }, [dateKey]);
 
   // Load friends and compute friend-of-the-day on mount
   useEffect(() => {
@@ -132,7 +137,9 @@ function InviteInner() {
   }, [dateKey]);
 
   const text = pod?.text ?? "";
-  const sms = `hey ${friend || "friend"}! ${text}`;
+
+  // IMPORTANT: Keep share function exactly the same; just update the sms it uses.
+  const sms = `hey ${friend || "friend"}! today's playdate is: ${text} my answer: ${answer || ""}. what's your answer?`;
 
   const shareNative = async () => {
     // Share the invite link; friend is re-selected on load per day
@@ -156,17 +163,21 @@ function InviteInner() {
     }
   };
 
-  return (
-<main
-  style={{
-    minHeight: "100dvh",
-    display: "grid",
-    placeItems: "center",
-    padding: "24px",
-    background: "#fff", // force white canvas
-  }}
->
+  const onSubmit = () => {
+    // Show modal with friend name + share button
+    setShowModal(true);
+  };
 
+  return (
+    <main
+      style={{
+        minHeight: "100dvh",
+        display: "grid",
+        placeItems: "center",
+        padding: "24px",
+        background: "#fff",
+      }}
+    >
       <div style={{ maxWidth: 720, textTransform: "lowercase", width: "100%" }}>
         {/* Logo block (same as app/page.tsx) */}
         <div style={{ marginBottom: 16, display: "flex", alignItems: "center", gap: 12 }}>
@@ -191,73 +202,59 @@ function InviteInner() {
             background: "#fff",
           }}
         >
-          {/* Title above the box */}
+          {/* Title */}
           <div style={{ marginBottom: 12 }}>
             <div style={{ fontSize: 18, fontWeight: 700 }}>today&apos;s playdate:</div>
           </div>
 
-          <div style={{ marginBottom: 12 }}>
-            <div style={{ fontSize: 14, opacity: 0.7 }}>friend of the day</div>
-            <input
-              value={friend}
-              onChange={(e) => setFriend(e.target.value)}
-              aria-label="friend name"
-              placeholder={friends.length ? "friend of the day" : "add friends on /friends"}
-              style={{
-                width: "100%",
-                marginTop: 6,
-                padding: "10px 12px",
-                border: "1px solid #000",
-                borderRadius: 8,
-              }}
-            />
-            {!friends.length && (
-              <div style={{ fontSize: 12, opacity: 0.6, marginTop: 6 }}>
-                no friends found — go to <a href="/friends">/friends</a> to add some
-              </div>
-            )}
-          </div>
-
+          {/* Date line */}
           <div style={{ marginBottom: 12 }}>
             <div style={{ fontSize: 14, opacity: 0.7 }}>
-              prompt of the day{pod?.date ? ` — ${pod.date}` : ""}
+              prompt of the day - {displayDate}
             </div>
-            <div
+          </div>
+
+          {/* Prompt text */}
+          <div
+            style={{
+              width: "100%",
+              marginTop: 0,
+              marginBottom: 12,
+              padding: "10px 12px",
+              border: "1px solid #000",
+              borderRadius: 8,
+              background: "#f9f9f9",
+              whiteSpace: "pre-wrap",
+              minHeight: 72,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {loading ? "loading…" : text}
+          </div>
+
+          {/* Answer box */}
+          <div style={{ marginBottom: 12 }}>
+            <textarea
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              aria-label="your answer"
+              placeholder="type your answer here"
+              rows={3}
               style={{
                 width: "100%",
-                marginTop: 6,
                 padding: "10px 12px",
                 border: "1px solid #000",
                 borderRadius: 8,
-                background: "#f9f9f9",
-                whiteSpace: "pre-wrap",
-                minHeight: 72,
-                display: "flex",
-                alignItems: "center",
+                resize: "vertical",
               }}
-            >
-              {loading ? "loading…" : text}
-            </div>
+            />
           </div>
 
-          <div style={{ marginBottom: 12 }}>
-            <div style={{ fontSize: 14, opacity: 0.7 }}>suggested sms</div>
-            <div
-              style={{
-                border: "1px dashed #000",
-                borderRadius: 8,
-                padding: 12,
-                background: "#f9f9f9",
-                whiteSpace: "pre-wrap",
-              }}
-            >
-              {sms}
-            </div>
-          </div>
-
+          {/* Submit button */}
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <button
-              onClick={shareNative}
+              onClick={onSubmit}
               style={{
                 padding: "10px 14px",
                 borderRadius: 10,
@@ -267,11 +264,76 @@ function InviteInner() {
                 cursor: "pointer",
               }}
             >
-              share
+              submit
             </button>
           </div>
         </div>
       </div>
+
+      {/* Modal popup on submit */}
+      {showModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.3)",
+            display: "grid",
+            placeItems: "center",
+            padding: 16,
+          }}
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: 420,
+              border: "1px solid #000",
+              borderRadius: 16,
+              padding: 16,
+              boxShadow: "4px 4px 0 #000",
+              background: "#fff",
+              textTransform: "lowercase",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>
+              send this playdate to: {friend || "friend"}
+            </div>
+
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <button
+                onClick={shareNative}
+                style={{
+                  padding: "10px 14px",
+                  borderRadius: 10,
+                  border: "1px solid #000",
+                  background: "transparent",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                share
+              </button>
+
+              <button
+                onClick={() => setShowModal(false)}
+                style={{
+                  padding: "10px 14px",
+                  borderRadius: 10,
+                  border: "1px solid #000",
+                  background: "transparent",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
@@ -283,3 +345,4 @@ export default function InvitePage() {
     </Suspense>
   );
 }
+

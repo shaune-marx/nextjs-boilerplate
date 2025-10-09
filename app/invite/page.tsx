@@ -90,6 +90,7 @@ function InviteInner() {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const dateKey = useMemo(() => localKeyFor10amCutover(), []);
+  const answerKey = useMemo(() => `playdate:answer:${dateKey}`, [dateKey]);
   const displayDate = useMemo(() => {
     const [y, m, d] = dateKey.split("-");
     return `${m}-${d}-${y}`;
@@ -116,6 +117,25 @@ function InviteInner() {
     return () => window.removeEventListener("storage", handler);
   }, [dateKey]);
 
+
+  // Load saved answer for today (if any)
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(answerKey);
+      if (saved !== null) setAnswer(saved);
+    } catch {}
+  }, [answerKey, setAnswer]);
+
+  // Save whenever the answer changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(answerKey, answer);
+    } catch {}
+  }, [answer, answerKey]);
+
+
+
+  
   // fetch the prompt-of-the-day for the local day (10:00 am cutover)
   useEffect(() => {
     let mounted = true;
@@ -304,7 +324,7 @@ function InviteInner() {
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>
-              send this playdate to: {friend || "friend"}
+              send this to: {friend || "friend"}
             </div>
 
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>

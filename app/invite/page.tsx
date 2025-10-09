@@ -86,7 +86,15 @@ function InviteInner() {
   const [loading, setLoading] = useState(true);
 
   // new: user's typed answer + modal visibility
-  const [answer, setAnswer] = useState<string>("");
+ const [answer, setAnswer] = useState<string>(() => {
+  try {
+    const k = `playdate:answer:${localKeyFor10amCutover()}`;
+    return localStorage.getItem(k) ?? "";
+  } catch {
+    return "";
+  }
+});
+
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const dateKey = useMemo(() => localKeyFor10amCutover(), []);

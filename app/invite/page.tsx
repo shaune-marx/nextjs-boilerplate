@@ -139,7 +139,12 @@ function InviteInner() {
   const text = pod?.text ?? "";
 
   // IMPORTANT: Keep share function exactly the same; just update the sms it uses.
-  const sms = `hey ${friend || "friend"}! today's playdate is: ${text} my answer: ${answer || ""}. what's your answer?`;
+  const sms =
+  `hey ${friend || "friend"}!\n` +
+  `today's playdate is: ${text}\n` +
+  `my answer: ${answer || ""}.\n` +
+  `what's your answer?`;
+
 
   const shareNative = async () => {
     // Share the invite link; friend is re-selected on load per day

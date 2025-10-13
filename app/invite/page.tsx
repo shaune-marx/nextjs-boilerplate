@@ -335,14 +335,15 @@ const shareNative = async () => {
               <div style={{ fontSize: 14, opacity: 0.7, marginBottom: 6 }}>
                 optional: add a picture
               </div>
-            <input
+
+<input
   id="photo-input"
   type="file"
   accept="image/*"
   onChange={onPhotoChange}
   aria-label="upload a picture"
   style={{ display: "none" }}
-//>
+/>
 <label
   htmlFor="photo-input"
   style={{
@@ -359,6 +360,9 @@ const shareNative = async () => {
 >
   choose photo
 </label>
+
+
+              
 
               {photoPreviewUrl && (
                 <div

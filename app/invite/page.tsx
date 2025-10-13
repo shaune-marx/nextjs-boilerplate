@@ -191,35 +191,39 @@ function InviteInner() {
     `what's your answer?`;
 
   // Keep your share function behavior; only enhancement: attach photo when supported
-  const shareNative = async () => {
-    const link = new URL(window.location.origin + "/invite").toString();
-    const title = "playdate — invitation to play";
-    const textToShare = sms;
+ const shareNative = async () => {
+  const link = new URL(window.location.origin + "/invite").toString();
+  const title = "playdate — invitation to play";
+  const textToShare = sms;
 
-    try {
-      if (
-        photoFile &&
-        // @ts-expect-error - canShare is not in older TS libdoms
-        navigator.canShare &&
-        // @ts-expect-error
-        navigator.canShare({ files: [photoFile] })
-      ) {
-        // @ts-expect-error
-        await navigator.share({ title, text: textToShare, url: link, files: [photoFile] });
-        return;
-      }
+  try {
+    const nav: any = navigator;
 
-      if (navigator.share) {
-        await navigator.share({ title, text: textToShare, url: link });
-        return;
-      }
-
-      await navigator.clipboard.writeText(link);
-      alert("copied to clipboard");
-    } catch {
-      // user canceled or share failed — no-op
+    // If we have a photo and file-sharing is supported, include it
+    if (
+      photoFile &&
+      nav.canShare &&
+      typeof nav.canShare === "function" &&
+      nav.canShare({ files: [photoFile] })
+    ) {
+      await nav.share({ title, text: textToShare, url: link, files: [photoFile] });
+      return;
     }
-  };
+
+    // Fallback: text-only share (same behavior as before)
+    if (nav.share && typeof nav.share === "function") {
+      await nav.share({ title, text: textToShare, url: link });
+      return;
+    }
+
+    // Last resort: copy the link
+    await navigator.clipboard.writeText(link);
+    alert("copied to clipboard");
+  } catch {
+    // user canceled or share failed — no-op
+  }
+};
+
 
   const onSubmit = () => {
     setShowModal(true);

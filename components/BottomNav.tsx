@@ -43,11 +43,25 @@ const FileIcon = (p: React.SVGProps<SVGSVGElement>) => (
     <path d="M14 3v5h5" fill="none" stroke="currentColor" strokeWidth="1.6" />
   </IconBase>
 );
+// NEW: Star icon for "playdate"
+const StarIcon = (p: React.SVGProps<SVGSVGElement>) => (
+  <IconBase {...p}>
+    <path
+      d="M12 3.5l2.6 5.3 5.9.9-4.3 4.2 1 5.8L12 17.8 6.8 19.7l1-5.8-4.3-4.2 5.9-.9L12 3.5z"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinejoin="round"
+    />
+  </IconBase>
+);
 
 // --- Non-contact nav items ---
 const NAV_ITEMS = [
   { href: "/", label: "sign up", Icon: HomeIcon },
   { href: "/friends", label: "friends", Icon: UsersIcon },
+  // NEW: playdate link to /invite (inserted before "about")
+  { href: "/invite", label: "playdate", Icon: StarIcon },
   { href: "/about", label: "about", Icon: InfoIcon },
   { href: "/privacy", label: "privacy", Icon: ShieldIcon },
   { href: "/terms", label: "terms", Icon: FileIcon },
@@ -137,7 +151,7 @@ export default function BottomNav() {
       >
         <ul
           className={cn(
-            "mx-auto grid max-w-screen-sm grid-cols-6",
+            "mx-auto grid max-w-screen-sm grid-cols-7", // 6 -> 7 to fit the new item
             "h-16 items-center gap-1 px-2",
             "pb-[env(safe-area-inset-bottom)]"
           )}
@@ -227,46 +241,34 @@ export default function BottomNav() {
                 Open email app
               </a>
 
-
-
               <button
-  type="button"
-  className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
-  onClick={() => {
-    const to = "support@todaysplaydate.com";
-    const ua = navigator.userAgent || "";
-    const isAndroid = /Android/i.test(ua);
-    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+                type="button"
+                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                onClick={() => {
+                  const to = "support@todaysplaydate.com";
+                  const ua = navigator.userAgent || "";
+                  const isAndroid = /Android/i.test(ua);
+                  const isIOS = /iPhone|iPad|iPod/i.test(ua);
 
-    if (isAndroid) {
-      // Android: try the Gmail app via intent; fall back to Gmail web compose
-      const intent = `intent://co?to=${encodeURIComponent(to)}#Intent;scheme=mailto;package=com.google.android.gm;end`;
-      window.location.href = intent;
-      setTimeout(() => {
-        window.location.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}`;
-      }, 700);
-    } else if (isIOS) {
-      // iOS: use the Gmail iOS scheme to avoid the Safari “invalid address” popup
-      window.location.href = `googlegmail://co?to=${encodeURIComponent(to)}`;
-      // iOS will show “Open in Gmail?”; if Gmail isn’t installed, iOS does nothing (user can use the other options)
-    } else {
-      // Desktop/other: Gmail web compose
-      window.location.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}`;
-    }
+                  if (isAndroid) {
+                    const intent = `intent://co?to=${encodeURIComponent(to)}#Intent;scheme=mailto;package=com.google.android.gm;end`;
+                    window.location.href = intent;
+                    setTimeout(() => {
+                      window.location.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}`;
+                    }, 700);
+                  } else if (isIOS) {
+                    window.location.href = `googlegmail://co?to=${encodeURIComponent(to)}`;
+                  } else {
+                    window.location.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}`;
+                  }
 
-    // Close the sheet shortly after navigation
-    setTimeout(() => {
-      setContactOpen(false);
-    }, 600);
-  }}
->
-  Open Gmail
-</button>
-
-
-
-
-           
+                  setTimeout(() => {
+                    setContactOpen(false);
+                  }, 600);
+                }}
+              >
+                Open Gmail
+              </button>
 
               <button
                 type="button"
@@ -302,6 +304,3 @@ export default function BottomNav() {
     </>
   );
 }
-
-
-

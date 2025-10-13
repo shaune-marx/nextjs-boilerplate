@@ -97,7 +97,7 @@ function InviteInner() {
   });
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  // optional photo (for picture questions); keep the original File for sharing
+  // optional photo (for picture questions)
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string>("");
 
@@ -183,56 +183,46 @@ function InviteInner() {
 
   const text = pod?.text ?? "";
 
-  // Prefilled SMS with line breaks (kept share logic the same, just using this sms)
+  // Prefilled SMS with line breaks
   const sms =
     `hey ${friend || "friend"}!\n` +
     `today's playdate is: ${text}\n` +
     `my answer: ${answer || ""}.\n` +
     `what's your answer?`;
 
-  // Keep your share function behavior; only enhancement: attach photo when supported
-const shareNative = async () => {
-  const link = new URL(window.location.origin + "/invite").toString();
-  const title = "playdate — invitation to play";
-  const textToShare = sms;
+  // Share (keeps original behavior; attaches photo only when supported)
+  const shareNative = async () => {
+    const link = new URL(window.location.origin + "/invite").toString();
+    const title = "playdate — invitation to play";
+    const textToShare = sms;
 
-  try {
-    const nav: any = navigator;
-    const isPictureDay =
-      pod?.type === "picture question" ||
-      (typeof window !== "undefined" && window.location.search.includes("force=picture"));
+    try {
+      const nav: any = navigator;
 
-    // If it's a picture day AND we have a photo AND file sharing is supported:
-    // 1) put the site link FIRST inside the text
-    // 2) then the suggested sms text
-    // 3) attach the photo (files)
-    if (
-      isPictureDay &&
-      photoFile &&
-      nav.canShare &&
-      typeof nav.canShare === "function" &&
-      nav.canShare({ files: [photoFile] })
-    ) {
-      const textWithLinkFirst = `${link}\n${textToShare}`;
-      await nav.share({ title, text: textWithLinkFirst, files: [photoFile] });
-      return;
+      // If we have a photo and the browser supports file sharing, include it
+      if (
+        photoFile &&
+        nav.canShare &&
+        typeof nav.canShare === "function" &&
+        nav.canShare({ files: [photoFile] })
+      ) {
+        await nav.share({ title, text: textToShare, url: link, files: [photoFile] });
+        return;
+      }
+
+      // Fallback: original text-only share
+      if (nav.share && typeof nav.share === "function") {
+        await nav.share({ title, text: textToShare, url: link });
+        return;
+      }
+
+      // Last resort: copy link
+      await navigator.clipboard.writeText(link);
+      alert("copied to clipboard");
+    } catch {
+      // user canceled or share failed — no-op
     }
-
-    // Fallbacks (non-picture days or no file/capability):
-    // Keep your original behavior: text + separate url
-    if (nav.share && typeof nav.share === "function") {
-      await nav.share({ title, text: textToShare, url: link });
-      return;
-    }
-
-    await navigator.clipboard.writeText(link);
-    alert("copied to clipboard");
-  } catch {
-    // user canceled or share failed — no-op
-  }
-};
-
-
+  };
 
   const onSubmit = () => {
     setShowModal(true);
@@ -243,6 +233,10 @@ const shareNative = async () => {
     setPhotoFile(f);
   };
   const clearPhoto = () => setPhotoFile(null);
+
+  // Debug switch to test photo UI even on non-picture days:
+  const forcePicture = typeof window !== "undefined" && window.location.search.includes("force=picture");
+  const isPictureDay = pod?.type === "picture question" || forcePicture;
 
   return (
     <main
@@ -328,38 +322,32 @@ const shareNative = async () => {
           </div>
 
           {/* Photo upload only for picture questions */}
-          {(pod?.type === "picture question" ||
-  (typeof window !== "undefined" && window.location.search.includes("force=picture"))) && (
-
-
-<input
-  id="photo-input"
-  type="file"
-  accept="image/*"
-  onChange={onPhotoChange}
-  aria-label="upload a picture"
-  style={{ display: "none" }}
-/>
-<label
-  htmlFor="photo-input"
-  style={{
-    display: "inline-block",
-    padding: "10px 14px",
-    borderRadius: 10,
-    border: "1px solid #000",
-    background: "transparent",
-    fontWeight: 600,
-    cursor: "pointer",
-    marginBottom: 8,
-    userSelect: "none",
-  }}
->
-  choose photo
-</label>
-
-
-              
-
+          {isPictureDay && (
+            <div style={{ marginBottom: 12 }}>
+              <input
+                id="photo-input"
+                type="file"
+                accept="image/*"
+                onChange={onPhotoChange}
+                aria-label="upload a picture"
+                style={{ display: "none" }}
+              />
+              <label
+                htmlFor="photo-input"
+                style={{
+                  display: "inline-block",
+                  padding: "10px 14px",
+                  borderRadius: 10,
+                  border: "1px solid #000",
+                  background: "transparent",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  marginBottom: 8,
+                  userSelect: "none",
+                }}
+              >
+                choose photo
+              </label>
               {photoPreviewUrl && (
                 <div
                   style={{
@@ -490,3 +478,4 @@ export default function InvitePage() {
     </Suspense>
   );
 }
+

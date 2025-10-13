@@ -184,11 +184,12 @@ function InviteInner() {
   const text = pod?.text ?? "";
 
   // Prefilled SMS with line breaks
-  const sms =
-    `hey ${friend || "friend"}!\n` +
-    `today's playdate is: ${text}\n` +
-    `my answer: ${answer || ""}.\n` +
-    `what's your answer?`;
+ const sms =
+  `hey ${friend || "friend"}!\n\n` +
+  `today's playdate is: ${text}\n\n` +
+  `my answer: ${answer || ""}.\n\n` +
+  `what's your answer?`;
+
 
   // Share (keeps original behavior; attaches photo only when supported)
   const shareNative = async () => {

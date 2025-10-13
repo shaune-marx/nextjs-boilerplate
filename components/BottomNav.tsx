@@ -277,7 +277,7 @@ export default function BottomNav() {
                 className="rounded-lg px-4 py-3 text-center underline opacity-80"
                 onClick={() => setContactOpen(false)}
               >
-                Cancel
+                cancel
               </button>
 
               <p className="text-center text-xs opacity-70 mt-1">

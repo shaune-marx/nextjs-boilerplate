@@ -85,24 +85,30 @@ function InviteInner() {
   const [pod, setPod] = useState<Pod | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // new: user's typed answer + modal visibility
- const [answer, setAnswer] = useState<string>(() => {
-  try {
-    const k = `playdate:answer:${localKeyFor10amCutover()}`;
-    return localStorage.getItem(k) ?? "";
-  } catch {
-    return "";
-  }
-});
-
+  // user's typed answer + modal visibility
+  const [answer, setAnswer] = useState<string>(() => {
+    // lazy init so it appears immediately on first paint
+    try {
+      const k = `playdate:answer:${localKeyFor10amCutover()}`;
+      return localStorage.getItem(k) ?? "";
+    } catch {
+      return "";
+    }
+  });
   const [showModal, setShowModal] = useState<boolean>(false);
 
+  // optional photo (for picture questions); keep the original File for sharing
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string>("");
+
   const dateKey = useMemo(() => localKeyFor10amCutover(), []);
-  const answerKey = useMemo(() => `playdate:answer:${dateKey}`, [dateKey]);
   const displayDate = useMemo(() => {
     const [y, m, d] = dateKey.split("-");
     return `${m}-${d}-${y}`;
   }, [dateKey]);
+
+  // per-day storage keys
+  const answerKey = useMemo(() => `playdate:answer:${dateKey}`, [dateKey]);
 
   // Load friends and compute friend-of-the-day on mount
   useEffect(() => {
@@ -125,25 +131,20 @@ function InviteInner() {
     return () => window.removeEventListener("storage", handler);
   }, [dateKey]);
 
-
-  // Load saved answer for today (if any)
+  // Persist answer per day
   useEffect(() => {
     try {
       const saved = localStorage.getItem(answerKey);
       if (saved !== null) setAnswer(saved);
     } catch {}
-  }, [answerKey, setAnswer]);
+  }, [answerKey]);
 
-  // Save whenever the answer changes
   useEffect(() => {
     try {
       localStorage.setItem(answerKey, answer);
     } catch {}
   }, [answer, answerKey]);
 
-
-
-  
   // fetch the prompt-of-the-day for the local day (10:00 am cutover)
   useEffect(() => {
     let mounted = true;
@@ -164,42 +165,71 @@ function InviteInner() {
     };
   }, [dateKey]);
 
+  // photo preview URL lifecycle
+  useEffect(() => {
+    if (!photoFile) {
+      if (photoPreviewUrl) {
+        URL.revokeObjectURL(photoPreviewUrl);
+        setPhotoPreviewUrl("");
+      }
+      return;
+    }
+    const url = URL.createObjectURL(photoFile);
+    setPhotoPreviewUrl(url);
+    return () => {
+      URL.revokeObjectURL(url);
+    };
+  }, [photoFile]);
+
   const text = pod?.text ?? "";
 
-  // IMPORTANT: Keep share function exactly the same; just update the sms it uses.
+  // Prefilled SMS with line breaks (kept share logic the same, just using this sms)
   const sms =
-  `hey ${friend || "friend"}!\n` +
-  `today's playdate is: ${text}\n` +
-  `my answer: ${answer || ""}.\n` +
-  `what's your answer?`;
+    `hey ${friend || "friend"}!\n` +
+    `today's playdate is: ${text}\n` +
+    `my answer: ${answer || ""}.\n` +
+    `what's your answer?`;
 
-
+  // Keep your share function behavior; only enhancement: attach photo when supported
   const shareNative = async () => {
-    // Share the invite link; friend is re-selected on load per day
     const link = new URL(window.location.origin + "/invite").toString();
     const title = "playdate — invitation to play";
     const textToShare = sms;
 
-    if (navigator.share) {
-      try {
+    try {
+      if (
+        photoFile &&
+        // @ts-expect-error - canShare is not in older TS libdoms
+        navigator.canShare &&
+        // @ts-expect-error
+        navigator.canShare({ files: [photoFile] })
+      ) {
+        // @ts-expect-error
+        await navigator.share({ title, text: textToShare, url: link, files: [photoFile] });
+        return;
+      }
+
+      if (navigator.share) {
         await navigator.share({ title, text: textToShare, url: link });
-      } catch {
-        // user canceled or share failed
+        return;
       }
-    } else {
-      try {
-        await navigator.clipboard.writeText(link);
-        alert("copied to clipboard");
-      } catch {
-        // clipboard not available; do nothing
-      }
+
+      await navigator.clipboard.writeText(link);
+      alert("copied to clipboard");
+    } catch {
+      // user canceled or share failed — no-op
     }
   };
 
   const onSubmit = () => {
-    // Show modal with friend name + share button
     setShowModal(true);
   };
+
+  const onPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0] ?? null;
+    setPhotoFile(f);
+  };
+  const clearPhoto = () => setPhotoFile(null);
 
   return (
     <main
@@ -217,7 +247,7 @@ function InviteInner() {
           <Image
             src="/playdate-logo.png"
             alt="playdate"
-            width={320} // adjust if you want larger/smaller
+            width={320}
             height={86}
             priority
           />
@@ -284,6 +314,55 @@ function InviteInner() {
             />
           </div>
 
+          {/* Photo upload only for picture questions */}
+          {pod?.type === "picture question" && (
+            <div style={{ marginBottom: 12 }}>
+              <div style={{ fontSize: 14, opacity: 0.7, marginBottom: 6 }}>
+                optional: add a picture
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={onPhotoChange}
+                aria-label="upload a picture"
+                style={{ display: "block", marginBottom: 8 }}
+              />
+              {photoPreviewUrl && (
+                <div
+                  style={{
+                    border: "1px solid #000",
+                    borderRadius: 8,
+                    padding: 8,
+                    background: "#f9f9f9",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                >
+                  <img
+                    src={photoPreviewUrl}
+                    alt="preview"
+                    style={{ maxWidth: "100%", maxHeight: 140, borderRadius: 6, display: "block" }}
+                  />
+                  <button
+                    onClick={clearPhoto}
+                    style={{
+                      padding: "8px 10px",
+                      borderRadius: 8,
+                      border: "1px solid #000",
+                      background: "transparent",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    remove
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Submit button */}
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <button
@@ -332,7 +411,7 @@ function InviteInner() {
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>
-              send this to: {friend || "friend"}
+              send this playdate to: {friend || "friend"}
             </div>
 
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -378,4 +457,3 @@ export default function InvitePage() {
     </Suspense>
   );
 }
-

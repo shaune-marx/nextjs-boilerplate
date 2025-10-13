@@ -1,6 +1,7 @@
 export default function TermsPage() {
   return (
     <main style={{ maxWidth: 720, margin: "0 auto", padding: 24, textTransform: "lowercase" }}>
+      {/* terms header */}
       <h1 style={{ fontSize: 28, marginBottom: 12 }}>terms</h1>
 
       <p style={{ marginBottom: 12 }}>
@@ -32,32 +33,39 @@ export default function TermsPage() {
         we may update these terms. if we make material changes, we’ll post them here with a new date.
       </p>
 
-      {/* --- privacy policy appended below --- */}
+      {/* divider */}
       <hr style={{ margin: "24px 0" }} />
 
-       <h1 style={{ fontSize: 28, marginBottom: 12 }}>terms</h1>
-      <div style={{ display: "grid", gap: 12 }}>
-        <p>
-          we respect your privacy. we only collect the information you give us (like email and, if you choose, a phone number).
-        </p>
-        <p>
-          how we use it: to contact you about playdate, to send daily prompts (if you opt in), and to improve the product.
-        </p>
-        <p>
-          data sharing: we don’t sell your data. we may use trusted processors (like hosting, email, or analytics) to run the service.
-        </p>
-        <p>
-          sms: if you opt in to texts, you can reply stop to cancel and help for help. msg &amp; data rates may apply.
-        </p>
-        <p>
-          contact: questions? email{" "}
-          <a href="mailto:support@todaysplaydate.com" style={{ textDecoration: "underline" }}>
-            support@todaysplaydate.com
-          </a>
-          .
-        </p>
-      </div>
+      {/* privacy policy header — match the terms header */}
+      <h1 style={{ fontSize: 28, marginBottom: 12 }}>privacy policy</h1>
 
+      <p style={{ marginBottom: 12 }}>
+        we respect your privacy. we only collect the information you give us (like email and, if you choose, a phone number).
+      </p>
+
+      {/* privacy subheaders — match terms subheaders */}
+      <h2 style={{ fontSize: 20, margin: "20px 0 8px" }}>how we use it</h2>
+      <p style={{ marginBottom: 12 }}>
+        to contact you about playdate, to send daily prompts (if you opt in), and to improve the product.
+      </p>
+
+      <h2 style={{ fontSize: 20, margin: "20px 0 8px" }}>data sharing</h2>
+      <p style={{ marginBottom: 12 }}>
+        we don’t sell your data. we may use trusted processors (like hosting, email, or analytics) to run the service.
+      </p>
+
+      <h2 style={{ fontSize: 20, margin: "20px 0 8px" }}>sms</h2>
+      <p style={{ marginBottom: 12 }}>
+        if you opt in to texts, you can reply <strong>stop</strong> to cancel and <strong>help</strong> for help. msg &amp; data rates may apply.
+      </p>
+
+      <p style={{ marginBottom: 12 }}>
+        questions? email{" "}
+        <a href="mailto:support@todaysplaydate.com" style={{ textDecoration: "underline" }}>
+          support@todaysplaydate.com
+        </a>
+        .
+      </p>
 
       <p style={{ opacity: 0.7, fontSize: 12 }}>
         last updated: {new Date().toISOString().slice(0, 10)}

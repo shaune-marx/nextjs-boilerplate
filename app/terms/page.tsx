@@ -37,6 +37,27 @@ export default function TermsPage() {
         we may update these terms. if we make material changes, we’ll post them here with a new date.
       </p>
 
+
+<hr className="my-6" />
+
+<h2 className="text-lg font-semibold mb-2">privacy policy</h2>
+
+<div className="space-y-3">
+  <p>
+    we respect your privacy. we only collect the information you give us (like email and, if you choose, a phone number).
+  </p>
+  <p>
+    how we use it: to contact you about playdate, to send daily prompts (if you opt in), and to improve the product.
+  </p>
+  <p>
+    data sharing: we don’t sell your data. we may use trusted processors (like hosting, email, or analytics) to run the service.
+  </p>
+  <p>
+    sms: if you opt in to texts, you can reply stop to cancel and help for help. msg &amp; data rates may apply.
+  </p>
+
+
+      
       <h2 style={{ fontSize: 20, margin: "20px 0 8px" }}>contact</h2>
       <p style={{ marginBottom: 12 }}>
         questions? email <a href="mailto:support@todaysplaydate.com">support@todaysplaydate.com</a>.

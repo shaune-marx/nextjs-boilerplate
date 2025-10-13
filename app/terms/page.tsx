@@ -35,7 +35,7 @@ export default function TermsPage() {
       {/* --- privacy policy appended below --- */}
       <hr style={{ margin: "24px 0" }} />
 
-      <h2 style={{ fontSize: 20, margin: "0 0 8px" }}>privacy policy</h2>
+       <h1 style={{ fontSize: 28, marginBottom: 12 }}>terms</h1>
       <div style={{ display: "grid", gap: 12 }}>
         <p>
           we respect your privacy. we only collect the information you give us (like email and, if you choose, a phone number).

@@ -32,18 +32,12 @@ const InfoIcon = (p: React.SVGProps<SVGSVGElement>) => (
     <path d="M12 10v6m0-8V7" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
   </IconBase>
 );
-const ShieldIcon = (p: React.SVGProps<SVGSVGElement>) => (
-  <IconBase {...p}>
-    <path d="M12 3l7 3v6c0 4.5-3.5 7.5-7 9-3.5-1.5-7-4.5-7-9V6l7-3z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-  </IconBase>
-);
 const FileIcon = (p: React.SVGProps<SVGSVGElement>) => (
   <IconBase {...p}>
     <path d="M7 3h7l4 4v14H7z" fill="none" stroke="currentColor" strokeWidth="1.6" />
     <path d="M14 3v5h5" fill="none" stroke="currentColor" strokeWidth="1.6" />
   </IconBase>
 );
-// NEW: Star icon for "playdate"
 const StarIcon = (p: React.SVGProps<SVGSVGElement>) => (
   <IconBase {...p}>
     <path
@@ -56,14 +50,12 @@ const StarIcon = (p: React.SVGProps<SVGSVGElement>) => (
   </IconBase>
 );
 
-// --- Non-contact nav items ---
+// --- Non-contact nav items (privacy removed) ---
 const NAV_ITEMS = [
   { href: "/", label: "sign up", Icon: HomeIcon },
   { href: "/friends", label: "friends", Icon: UsersIcon },
-  // NEW: playdate link to /invite (inserted before "about")
-  { href: "/invite", label: "playdate", Icon: StarIcon },
+  { href: "/invite", label: "playdate", Icon: StarIcon }, // new
   { href: "/about", label: "about", Icon: InfoIcon },
-  { href: "/privacy", label: "privacy", Icon: ShieldIcon },
   { href: "/terms", label: "terms", Icon: FileIcon },
 ] as const;
 
@@ -75,11 +67,9 @@ export default function BottomNav() {
   const firstContactRef = useRef<HTMLAnchorElement | null>(null);
   const sheetRef = useRef<HTMLDivElement | null>(null);
 
-  // Focus management, ESC-to-close, scroll lock, and focus trap
   useEffect(() => {
     if (!contactOpen) return;
 
-    // Move focus into the sheet
     firstContactRef.current?.focus();
 
     const focusableSelectors = [
@@ -128,7 +118,6 @@ export default function BottomNav() {
     };
     document.addEventListener("keydown", onKey);
 
-    // Prevent background scrolling while sheet is open
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -151,7 +140,7 @@ export default function BottomNav() {
       >
         <ul
           className={cn(
-            "mx-auto grid max-w-screen-sm grid-cols-7", // 6 -> 7 to fit the new item
+            "mx-auto grid max-w-screen-sm grid-cols-6", // back to 6
             "h-16 items-center gap-1 px-2",
             "pb-[env(safe-area-inset-bottom)]"
           )}
@@ -218,14 +207,11 @@ export default function BottomNav() {
           aria-label="Contact options"
           className="fixed inset-0 z-[60] flex items-end justify-center"
         >
-          {/* Backdrop (behind the sheet) */}
           <div
             className="fixed inset-0 bg-black/40 z-0"
             aria-hidden="true"
             onClick={() => setContactOpen(false)}
           />
-
-          {/* Sheet panel (above the backdrop) */}
           <div className="relative z-10 w-full max-w-screen-sm rounded-t-2xl bg-white p-4 shadow-lg dark:bg-neutral-900">
             <div className="mx-auto h-1 w-10 rounded-full bg-neutral-300/80 dark:bg-neutral-700/80 mb-3" />
             <h2 className="text-center text-base mb-2">contact playdate</h2>

@@ -331,10 +331,6 @@ const shareNative = async () => {
           {(pod?.type === "picture question" ||
   (typeof window !== "undefined" && window.location.search.includes("force=picture"))) && (
 
-            <div style={{ marginBottom: 12 }}>
-              <div style={{ fontSize: 14, opacity: 0.7, marginBottom: 6 }}>
-                optional: add a picture
-              </div>
 
 <input
   id="photo-input"

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description:
     "we’ll send you one fun question every day, addressed to a friend you want to talk to more often.",
   openGraph: {
-    title: "playdate — keep your friends in orbit",
+    title: "playdate — keep your friends in your orbit",
     description:
       "we’ll send you one fun question every day, addressed to a friend you want to talk to more often.",
     url: "https://todaysplaydate.com",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "playdate — keep your friends in orbit",
+    title: "playdate — keep your friends in your orbit",
     description:
       "we’ll send you one fun question every day, addressed to a friend you want to talk to more often.",
     images: ["/twitter-image.png"],

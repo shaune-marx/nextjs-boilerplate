@@ -22,11 +22,6 @@ export default function TermsPage() {
         don’t misuse the service, break laws, or harass others. we may limit or suspend access for abuse or security reasons.
       </p>
 
-      <h2 style={{ fontSize: 20, margin: "20px 0 8px" }}>privacy</h2>
-      <p style={{ marginBottom: 12 }}>
-        see our <a href="/privacy" style={{ textDecoration: "underline" }}>privacy</a> page for how we handle data.
-      </p>
-
       <h2 style={{ fontSize: 20, margin: "20px 0 8px" }}>disclaimers & liability</h2>
       <p style={{ marginBottom: 12 }}>
         playdate is provided “as is.” to the extent allowed by law, we’re not liable for indirect or consequential damages.
@@ -37,31 +32,32 @@ export default function TermsPage() {
         we may update these terms. if we make material changes, we’ll post them here with a new date.
       </p>
 
+      {/* --- privacy policy appended below --- */}
+      <hr style={{ margin: "24px 0" }} />
 
-<hr className="my-6" />
+      <h2 style={{ fontSize: 20, margin: "0 0 8px" }}>privacy policy</h2>
+      <div style={{ display: "grid", gap: 12 }}>
+        <p>
+          we respect your privacy. we only collect the information you give us (like email and, if you choose, a phone number).
+        </p>
+        <p>
+          how we use it: to contact you about playdate, to send daily prompts (if you opt in), and to improve the product.
+        </p>
+        <p>
+          data sharing: we don’t sell your data. we may use trusted processors (like hosting, email, or analytics) to run the service.
+        </p>
+        <p>
+          sms: if you opt in to texts, you can reply stop to cancel and help for help. msg &amp; data rates may apply.
+        </p>
+        <p>
+          contact: questions? email{" "}
+          <a href="mailto:support@todaysplaydate.com" style={{ textDecoration: "underline" }}>
+            support@todaysplaydate.com
+          </a>
+          .
+        </p>
+      </div>
 
-<h2 className="text-lg font-semibold mb-2">privacy policy</h2>
-
-<div className="space-y-3">
-  <p>
-    we respect your privacy. we only collect the information you give us (like email and, if you choose, a phone number).
-  </p>
-  <p>
-    how we use it: to contact you about playdate, to send daily prompts (if you opt in), and to improve the product.
-  </p>
-  <p>
-    data sharing: we don’t sell your data. we may use trusted processors (like hosting, email, or analytics) to run the service.
-  </p>
-  <p>
-    sms: if you opt in to texts, you can reply stop to cancel and help for help. msg &amp; data rates may apply.
-  </p>
-
-
-      
-      <h2 style={{ fontSize: 20, margin: "20px 0 8px" }}>contact</h2>
-      <p style={{ marginBottom: 12 }}>
-        questions? email <a href="mailto:support@todaysplaydate.com">support@todaysplaydate.com</a>.
-      </p>
 
       <p style={{ opacity: 0.7, fontSize: 12 }}>
         last updated: {new Date().toISOString().slice(0, 10)}
@@ -69,3 +65,4 @@ export default function TermsPage() {
     </main>
   );
 }
+

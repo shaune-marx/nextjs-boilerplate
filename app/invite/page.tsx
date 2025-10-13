@@ -191,38 +191,47 @@ function InviteInner() {
     `what's your answer?`;
 
   // Keep your share function behavior; only enhancement: attach photo when supported
- const shareNative = async () => {
+const shareNative = async () => {
   const link = new URL(window.location.origin + "/invite").toString();
   const title = "playdate — invitation to play";
   const textToShare = sms;
 
   try {
     const nav: any = navigator;
+    const isPictureDay =
+      pod?.type === "picture question" ||
+      (typeof window !== "undefined" && window.location.search.includes("force=picture"));
 
-    // If we have a photo and file-sharing is supported, include it
+    // If it's a picture day AND we have a photo AND file sharing is supported:
+    // 1) put the site link FIRST inside the text
+    // 2) then the suggested sms text
+    // 3) attach the photo (files)
     if (
+      isPictureDay &&
       photoFile &&
       nav.canShare &&
       typeof nav.canShare === "function" &&
       nav.canShare({ files: [photoFile] })
     ) {
-      await nav.share({ title, text: textToShare, url: link, files: [photoFile] });
+      const textWithLinkFirst = `${link}\n${textToShare}`;
+      await nav.share({ title, text: textWithLinkFirst, files: [photoFile] });
       return;
     }
 
-    // Fallback: text-only share (same behavior as before)
+    // Fallbacks (non-picture days or no file/capability):
+    // Keep your original behavior: text + separate url
     if (nav.share && typeof nav.share === "function") {
       await nav.share({ title, text: textToShare, url: link });
       return;
     }
 
-    // Last resort: copy the link
     await navigator.clipboard.writeText(link);
     alert("copied to clipboard");
   } catch {
     // user canceled or share failed — no-op
   }
 };
+
 
 
   const onSubmit = () => {

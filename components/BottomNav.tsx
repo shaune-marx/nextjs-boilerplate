@@ -253,7 +253,7 @@ export default function BottomNav() {
                   }, 600);
                 }}
               >
-                Open Gmail
+                open gmail
               </button>
 
               <button
@@ -269,7 +269,7 @@ export default function BottomNav() {
                   }
                 }}
               >
-                {copied ? "Copied!" : "Copy email address"}
+                {copied ? "Copied!" : "copy email address"}
               </button>
 
               <button

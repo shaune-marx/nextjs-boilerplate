@@ -81,19 +81,18 @@ function selectFriendOfDay(friends: string[], dateKey: string): string {
 function InviteInner() {
   const [friends, setFriends] = useState<string[]>([]);
   const [friend, setFriend] = useState<string>("");
+
   const [pod, setPod] = useState<Pod | null>(null);
   const [loading, setLoading] = useState(true);
 
   // user's typed answer + modal visibility
   const [answer, setAnswer] = useState<string>(() => {
-    // lazy init so it appears immediately on first paint
     try {
       const k = `playdate:answer:${localKeyFor10amCutover()}`;
       return localStorage.getItem(k) ?? "";
     } catch {
       return "";
     }
-const answerRef = useRef<HTMLTextAreaElement | null>(null); 
   });
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -101,47 +100,45 @@ const answerRef = useRef<HTMLTextAreaElement | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string>("");
 
- const answerRef = useRef<HTMLTextAreaElement>(null);
+  // autosize textarea
+  const answerRef = useRef<HTMLTextAreaElement>(null);
   const autosize = () => {
     const el = answerRef.current;
     if (!el) return;
     el.style.height = "auto";
     el.style.height = el.scrollHeight + "px";
   };
-  
+
+  // dateKey that updates after 10am local (and on reload)
   const [dateKey, setDateKey] = useState(localKeyFor10amCutover());
+  useEffect(() => {
+    const check = () => {
+      const k = localKeyFor10amCutover();
+      setDateKey((prev) => (prev === k ? prev : k));
+    };
+    const onFocus = () => check();
+    const onVisible = () => {
+      if (!document.hidden) check();
+    };
+    const id = setInterval(check, 15 * 1000);
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      clearInterval(id);
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, []);
 
   const displayDate = useMemo(() => {
     const [y, m, d] = dateKey.split("-");
     return `${m}-${d}-${y}`;
   }, [dateKey]);
 
-// keep dateKey fresh: update on focus/visibility and every 15s
-useEffect(() => {
-  const check = () => {
-    const k = localKeyFor10amCutover();
-    setDateKey((prev) => (prev === k ? prev : k));
-  };
-  const onFocus = () => check();
-  const onVisible = () => { if (!document.hidden) check(); };
-
-  const id = setInterval(check, 15 * 1000);
-  window.addEventListener("focus", onFocus);
-  document.addEventListener("visibilitychange", onVisible);
-
-  return () => {
-    clearInterval(id);
-    window.removeEventListener("focus", onFocus);
-    document.removeEventListener("visibilitychange", onVisible);
-  };
-}, []);
-
-
-  
   // per-day storage keys
   const answerKey = useMemo(() => `playdate:answer:${dateKey}`, [dateKey]);
 
-  // Load friends and compute friend-of-the-day on mount
+  // Load friends and compute friend-of-the-day on mount/when date changes
   useEffect(() => {
     const list = readFriends();
     setFriends(list);
@@ -167,7 +164,10 @@ useEffect(() => {
     try {
       const saved = localStorage.getItem(answerKey);
       if (saved !== null) setAnswer(saved);
+      // ensure correct height on load
+      setTimeout(autosize, 0);
     } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answerKey]);
 
   useEffect(() => {
@@ -182,12 +182,10 @@ useEffect(() => {
     (async () => {
       try {
         setLoading(true);
-setPod(null);
-
-       const res = await fetch(`/api/prompt-of-the-day?key=${dateKey}&t=${Date.now()}`, {
-  cache: "no-store",
-});
-
+        setPod(null);
+        const res = await fetch(`/api/prompt-of-the-day?key=${dateKey}&t=${Date.now()}`, {
+          cache: "no-store",
+        });
         const data = (await res.json()) as Pod;
         if (mounted) setPod(data);
       } catch {
@@ -219,13 +217,12 @@ setPod(null);
 
   const text = pod?.text ?? "";
 
-  // Prefilled SMS with line breaks
- const sms =
-  `hey ${friend || "friend"}!\n\n` +
-  `today's playdate is: ${text}\n\n` +
-  `my answer: ${answer || ""}.\n\n` +
-  `what's your answer?`;
-
+  // Prefilled SMS with blank lines
+  const sms =
+    `hey ${friend || "friend"}!\n\n` +
+    `today's playdate is: ${text}\n\n` +
+    `my answer: ${answer || ""}.\n\n` +
+    `what's your answer?`;
 
   // Share (keeps original behavior; attaches photo only when supported)
   const shareNative = async () => {
@@ -236,7 +233,6 @@ setPod(null);
     try {
       const nav: any = navigator;
 
-      // If we have a photo and the browser supports file sharing, include it
       if (
         photoFile &&
         nav.canShare &&
@@ -247,13 +243,11 @@ setPod(null);
         return;
       }
 
-      // Fallback: original text-only share
       if (nav.share && typeof nav.share === "function") {
         await nav.share({ title, text: textToShare, url: link });
         return;
       }
 
-      // Last resort: copy link
       await navigator.clipboard.writeText(link);
       alert("copied to clipboard");
     } catch {
@@ -272,7 +266,8 @@ setPod(null);
   const clearPhoto = () => setPhotoFile(null);
 
   // Debug switch to test photo UI even on non-picture days:
-  const forcePicture = typeof window !== "undefined" && window.location.search.includes("force=picture");
+  const forcePicture =
+    typeof window !== "undefined" && window.location.search.includes("force=picture");
   const isPictureDay = pod?.type === "picture question" || forcePicture;
 
   return (
@@ -283,19 +278,13 @@ setPod(null);
         placeItems: "center",
         padding: "24px",
         background: "#fff",
-        paddingBottom: "calc(96px + env(safe-area-inset-bottom) )",
+        paddingBottom: "calc(96px + env(safe-area-inset-bottom))",
       }}
     >
       <div style={{ maxWidth: 720, textTransform: "lowercase", width: "100%" }}>
         {/* Logo block (same as app/page.tsx) */}
         <div style={{ marginBottom: 16, display: "flex", alignItems: "center", gap: 12 }}>
-          <Image
-            src="/playdate-logo.png"
-            alt="playdate"
-            width={320}
-            height={86}
-            priority
-          />
+          <Image src="/playdate-logo.png" alt="playdate" width={320} height={86} priority />
         </div>
 
         {/* Invite card */}
@@ -317,9 +306,7 @@ setPod(null);
 
           {/* Date line */}
           <div style={{ marginBottom: 12 }}>
-            <div style={{ fontSize: 14, opacity: 0.7 }}>
-              prompt of the day - {displayDate}
-            </div>
+            <div style={{ fontSize: 14, opacity: 0.7 }}>prompt of the day - {displayDate}</div>
           </div>
 
           {/* Prompt text */}
@@ -336,32 +323,32 @@ setPod(null);
               minHeight: 72,
               display: "flex",
               alignItems: "center",
+              lineHeight: 1.5,
             }}
           >
             {loading ? "loading…" : text}
           </div>
 
-          {/* Answer box */}
+          {/* Answer box (autosizing) */}
           <div style={{ marginBottom: 12 }}>
-           <textarea
-  ref={answerRef}
-  value={answer}
-  onChange={(e) => setAnswer(e.target.value)}
-  onInput={autosize}
-  aria-label="your answer"
-  placeholder="type your answer here"
-  rows={1}
-  style={{
-    width: "100%",
-    padding: "10px 12px",
-    border: "1px solid #000",
-    borderRadius: 8,
-    overflow: "hidden",   // hide scrollbar
-    resize: "none",       // prevent manual drag; we autosize instead
-    lineHeight: 1.4,
-  }}
-/>
-
+            <textarea
+              ref={answerRef}
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              onInput={autosize}
+              aria-label="your answer"
+              placeholder="type your answer here"
+              rows={1}
+              style={{
+                width: "100%",
+                padding: "10px 12px",
+                border: "1px solid #000",
+                borderRadius: 8,
+                overflow: "hidden",
+                resize: "none",
+                lineHeight: 1.4,
+              }}
+            />
           </div>
 
           {/* Photo upload only for picture questions */}
@@ -375,44 +362,40 @@ setPod(null);
                 aria-label="upload a picture"
                 style={{ display: "none" }}
               />
-              
-            <label
-  htmlFor="photo-input"
-  onMouseDown={(e) => {
-    const el = e.currentTarget as HTMLLabelElement;
-    el.style.transform = "translateY(1px)";
-    el.style.boxShadow = "3px 3px 0 #000";
-  }}
-  onMouseUp={(e) => {
-    const el = e.currentTarget as HTMLLabelElement;
-    el.style.transform = "translateY(0)";
-    el.style.boxShadow = "4px 4px 0 #000";
-  }}
-  onMouseLeave={(e) => {
-    const el = e.currentTarget as HTMLLabelElement;
-    el.style.transform = "translateY(0)";
-    el.style.boxShadow = "4px 4px 0 #000";
-  }}
-  style={{
-    display: "inline-block",
-    padding: "10px 14px",
-    borderRadius: 10,
-    border: "1px solid #000",
-    background: "transparent",
-    fontWeight: 600,
-    cursor: "pointer",
-    marginBottom: 8,
-    userSelect: "none",
-    transition: "transform 120ms ease, box-shadow 120ms ease",
-    boxShadow: "4px 4px 0 #000",
-    transform: "translateY(0)",
-  }}
->
-  choose photo
-</label>
-
-
-              
+              <label
+                htmlFor="photo-input"
+                onMouseDown={(e) => {
+                  const el = e.currentTarget as HTMLLabelElement;
+                  el.style.transform = "translateY(1px)";
+                  el.style.boxShadow = "3px 3px 0 #000";
+                }}
+                onMouseUp={(e) => {
+                  const el = e.currentTarget as HTMLLabelElement;
+                  el.style.transform = "translateY(0)";
+                  el.style.boxShadow = "4px 4px 0 #000";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLLabelElement;
+                  el.style.transform = "translateY(0)";
+                  el.style.boxShadow = "4px 4px 0 #000";
+                }}
+                style={{
+                  display: "inline-block",
+                  padding: "10px 14px",
+                  borderRadius: 10,
+                  border: "1px solid #000",
+                  background: "transparent",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  marginBottom: 8,
+                  userSelect: "none",
+                  transition: "transform 120ms ease, box-shadow 120ms ease",
+                  boxShadow: "4px 4px 0 #000",
+                  transform: "translateY(0)",
+                }}
+              >
+                choose photo
+              </label>
               {photoPreviewUrl && (
                 <div
                   style={{
@@ -428,85 +411,86 @@ setPod(null);
                   <img
                     src={photoPreviewUrl}
                     alt="preview"
-                    style={{ maxWidth: "100%", maxHeight: 140, borderRadius: 6, display: "block" }}
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: 140,
+                      borderRadius: 6,
+                      display: "block",
+                    }}
                   />
-
-                  
                   <button
-  onClick={clearPhoto}
-  onMouseDown={(e) => {
-    const el = e.currentTarget;
-    el.style.transform = "translateY(1px)";
-    el.style.boxShadow = "3px 3px 0 #000";
-  }}
-  onMouseUp={(e) => {
-    const el = e.currentTarget;
-    el.style.transform = "translateY(0)";
-    el.style.boxShadow = "4px 4px 0 #000";
-  }}
-  onMouseLeave={(e) => {
-    const el = e.currentTarget;
-    el.style.transform = "translateY(0)";
-    el.style.boxShadow = "4px 4px 0 #000";
-  }}
-  style={{
-    padding: "8px 10px",
-    borderRadius: 8,
-    border: "1px solid #000",
-    background: "transparent",
-    fontWeight: 600,
-    cursor: "pointer",
-    whiteSpace: "nowrap",
-    transition: "transform 120ms ease, box-shadow 120ms ease",
-    boxShadow: "4px 4px 0 #000",
-    transform: "translateY(0)",
-  }}
->
-  remove
-</button>
-
-
-                  
+                    onClick={clearPhoto}
+                    onMouseDown={(e) => {
+                      const el = e.currentTarget;
+                      el.style.transform = "translateY(1px)";
+                      el.style.boxShadow = "3px 3px 0 #000";
+                    }}
+                    onMouseUp={(e) => {
+                      const el = e.currentTarget;
+                      el.style.transform = "translateY(0)";
+                      el.style.boxShadow = "4px 4px 0 #000";
+                    }}
+                    onMouseLeave={(e) => {
+                      const el = e.currentTarget;
+                      el.style.transform = "translateY(0)";
+                      el.style.boxShadow = "4px 4px 0 #000";
+                    }}
+                    style={{
+                      padding: "8px 10px",
+                      borderRadius: 8,
+                      border: "1px solid #000",
+                      background: "transparent",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                      transition: "transform 120ms ease, box-shadow 120ms ease",
+                      boxShadow: "4px 4px 0 #000",
+                      transform: "translateY(0)",
+                    }}
+                  >
+                    remove
+                  </button>
                 </div>
               )}
             </div>
           )}
 
           {/* Submit button */}
-<div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-  <button
-    onClick={onSubmit}
-    onMouseDown={(e) => {
-      const el = e.currentTarget;
-      el.style.transform = "translateY(1px)";
-      el.style.boxShadow = "3px 3px 0 #000";
-    }}
-    onMouseUp={(e) => {
-      const el = e.currentTarget;
-      el.style.transform = "translateY(0)";
-      el.style.boxShadow = "4px 4px 0 #000";
-    }}
-    onMouseLeave={(e) => {
-      const el = e.currentTarget;
-      el.style.transform = "translateY(0)";
-      el.style.boxShadow = "4px 4px 0 #000";
-    }}
-    style={{
-      padding: "10px 14px",
-      borderRadius: 10,
-      border: "1px solid #000",
-      background: "transparent",
-      fontWeight: 600,
-      cursor: "pointer",
-      transition: "transform 120ms ease, box-shadow 120ms ease",
-      boxShadow: "4px 4px 0 #000",
-      transform: "translateY(0)",
-    }}
-  >
-    submit
-  </button>
-</div>
-
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <button
+              onClick={onSubmit}
+              onMouseDown={(e) => {
+                const el = e.currentTarget;
+                el.style.transform = "translateY(1px)";
+                el.style.boxShadow = "3px 3px 0 #000";
+              }}
+              onMouseUp={(e) => {
+                const el = e.currentTarget;
+                el.style.transform = "translateY(0)";
+                el.style.boxShadow = "4px 4px 0 #000";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget;
+                el.style.transform = "translateY(0)";
+                el.style.boxShadow = "4px 4px 0 #000";
+              }}
+              style={{
+                padding: "10px 14px",
+                borderRadius: 10,
+                border: "1px solid #000",
+                background: "transparent",
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "transform 120ms ease, box-shadow 120ms ease",
+                boxShadow: "4px 4px 0 #000",
+                transform: "translateY(0)",
+              }}
+            >
+              submit
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Modal popup on submit */}
       {showModal && (
@@ -541,73 +525,69 @@ setPod(null);
             </div>
 
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            
-              
               <button
-  onClick={shareNative}
-  onMouseDown={(e) => {
-    const el = e.currentTarget;
-    el.style.transform = "translateY(1px)";
-    el.style.boxShadow = "3px 3px 0 #000";
-  }}
-  onMouseUp={(e) => {
-    const el = e.currentTarget;
-    el.style.transform = "translateY(0)";
-    el.style.boxShadow = "4px 4px 0 #000";
-  }}
-  onMouseLeave={(e) => {
-    const el = e.currentTarget;
-    el.style.transform = "translateY(0)";
-    el.style.boxShadow = "4px 4px 0 #000";
-  }}
-  style={{
-    padding: "10px 14px",
-    borderRadius: 10,
-    border: "1px solid #000",
-    background: "transparent",
-    fontWeight: 600,
-    cursor: "pointer",
-    transition: "transform 120ms ease, box-shadow 120ms ease",
-    boxShadow: "4px 4px 0 #000",
-    transform: "translateY(0)",
-  }}
->
-  share
-</button>
-
+                onClick={shareNative}
+                onMouseDown={(e) => {
+                  const el = e.currentTarget;
+                  el.style.transform = "translateY(1px)";
+                  el.style.boxShadow = "3px 3px 0 #000";
+                }}
+                onMouseUp={(e) => {
+                  const el = e.currentTarget;
+                  el.style.transform = "translateY(0)";
+                  el.style.boxShadow = "4px 4px 0 #000";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget;
+                  el.style.transform = "translateY(0)";
+                  el.style.boxShadow = "4px 4px 0 #000";
+                }}
+                style={{
+                  padding: "10px 14px",
+                  borderRadius: 10,
+                  border: "1px solid #000",
+                  background: "transparent",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "transform 120ms ease, box-shadow 120ms ease",
+                  boxShadow: "4px 4px 0 #000",
+                  transform: "translateY(0)",
+                }}
+              >
+                share
+              </button>
 
               <button
-  onClick={() => setShowModal(false)}
-  onMouseDown={(e) => {
-    const el = e.currentTarget;
-    el.style.transform = "translateY(1px)";
-    el.style.boxShadow = "3px 3px 0 #000";
-  }}
-  onMouseUp={(e) => {
-    const el = e.currentTarget;
-    el.style.transform = "translateY(0)";
-    el.style.boxShadow = "4px 4px 0 #000";
-  }}
-  onMouseLeave={(e) => {
-    const el = e.currentTarget;
-    el.style.transform = "translateY(0)";
-    el.style.boxShadow = "4px 4px 0 #000";
-  }}
-  style={{
-    padding: "10px 14px",
-    borderRadius: 10,
-    border: "1px solid #000",
-    background: "transparent",
-    fontWeight: 600,
-    cursor: "pointer",
-    transition: "transform 120ms ease, box-shadow 120ms ease",
-    boxShadow: "4px 4px 0 #000",
-    transform: "translateY(0)",
-  }}
->
-  close
-</button>
-
+                onClick={() => setShowModal(false)}
+                onMouseDown={(e) => {
+                  const el = e.currentTarget;
+                  el.style.transform = "translateY(1px)";
+                  el.style.boxShadow = "3px 3px 0 #000";
+                }}
+                onMouseUp={(e) => {
+                  const el = e.currentTarget;
+                  el.style.transform = "translateY(0)";
+                  el.style.boxShadow = "4px 4px 0 #000";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget;
+                  el.style.transform = "translateY(0)";
+                  el.style.boxShadow = "4px 4px 0 #000";
+                }}
+                style={{
+                  padding: "10px 14px",
+                  borderRadius: 10,
+                  border: "1px solid #000",
+                  background: "transparent",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "transform 120ms ease, box-shadow 120ms ease",
+                  boxShadow: "4px 4px 0 #000",
+                  transform: "translateY(0)",
+                }}
+              >
+                close
+              </button>
             </div>
           </div>
         </div>
@@ -623,4 +603,5 @@ export default function InvitePage() {
     </Suspense>
   );
 }
+
 

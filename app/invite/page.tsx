@@ -174,7 +174,10 @@ useEffect(() => {
     (async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/prompt-of-the-day?key=${dateKey}`, { cache: "no-store" });
+       const res = await fetch(`/api/prompt-of-the-day?key=${dateKey}&t=${Date.now()}`, {
+  cache: "no-store",
+});
+
         const data = (await res.json()) as Pod;
         if (mounted) setPod(data);
       } catch {

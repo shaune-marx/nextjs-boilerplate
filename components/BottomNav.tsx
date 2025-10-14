@@ -255,7 +255,7 @@ export default function BottomNav() {
                   }, 600);
                 }}
               >
-                Open Gmail
+                open gmail
               </button>
 
               <button
@@ -271,7 +271,7 @@ export default function BottomNav() {
                   }
                 }}
               >
-                {copied ? "Copied!" : "Copy email address"}
+                {copied ? "Copied!" : "copy email address"}
               </button>
 
               <button
@@ -279,7 +279,7 @@ export default function BottomNav() {
                 className="rounded-lg px-4 py-3 text-center underline opacity-80"
                 onClick={() => setContactOpen(false)}
               >
-                Cancel
+                cancel
               </button>
 
               <p className="text-center text-xs opacity-70 mt-1">

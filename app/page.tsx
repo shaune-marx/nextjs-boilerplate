@@ -36,6 +36,7 @@ const [loading, setLoading] = useState(false);
             width={320}  // adjust if you want larger/smaller
             height={86}
             priority
+           sizes="(max-width: 720px) 320px, 320px"
           />
         </div>
 
@@ -142,6 +143,8 @@ onSubmit={async (e) => {
   style={{
     padding: "12px 16px",
     minHeight: 44,
+   marginTop: 24,
+   marginBottom: 24, 
     borderRadius: 10,
     border: "1px solid #000",
     background: "transparent",

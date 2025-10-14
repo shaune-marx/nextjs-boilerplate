@@ -11,31 +11,31 @@ function IconBase(props: React.SVGProps<SVGSVGElement>) {
 }
 const HomeIcon = (p: React.SVGProps<SVGSVGElement>) => (
   <IconBase {...p}>
-    <path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+    <path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
   </IconBase>
 );
 const UsersIcon = (p: React.SVGProps<SVGSVGElement>) => (
   <IconBase {...p}>
-    <circle cx="9" cy="8" r="3" fill="none" stroke="currentColor" strokeWidth="1.6" />
-    <path d="M2.5 18a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <circle cx="9" cy="8" r="3" fill="none" stroke="currentColor" strokeWidth="2" />
+    <path d="M2.5 18a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
   </IconBase>
 );
 const MailIcon = (p: React.SVGProps<SVGSVGElement>) => (
   <IconBase {...p}>
-    <path d="M3 6h18v12H3z" fill="none" stroke="currentColor" strokeWidth="1.6" />
-    <path d="M3 7l9 6 9-6" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <path d="M3 6h18v12H3z" fill="none" stroke="currentColor" strokeWidth="2" />
+    <path d="M3 7l9 6 9-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
   </IconBase>
 );
 const InfoIcon = (p: React.SVGProps<SVGSVGElement>) => (
   <IconBase {...p}>
-    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1.6" />
-    <path d="M12 10v6m0-8V7" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="2" />
+    <path d="M12 10v6m0-8V7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
   </IconBase>
 );
 const FileIcon = (p: React.SVGProps<SVGSVGElement>) => (
   <IconBase {...p}>
-    <path d="M7 3h7l4 4v14H7z" fill="none" stroke="currentColor" strokeWidth="1.6" />
-    <path d="M14 3v5h5" fill="none" stroke="currentColor" strokeWidth="1.6" />
+    <path d="M7 3h7l4 4v14H7z" fill="none" stroke="currentColor" strokeWidth="2" />
+    <path d="M14 3v5h5" fill="none" stroke="currentColor" strokeWidth="2" />
   </IconBase>
 );
 const StarIcon = (p: React.SVGProps<SVGSVGElement>) => (
@@ -44,7 +44,7 @@ const StarIcon = (p: React.SVGProps<SVGSVGElement>) => (
       d="M12 3.5l2.6 5.3 5.9.9-4.3 4.2 1 5.8L12 17.8 6.8 19.7l1-5.8-4.3-4.2 5.9-.9L12 3.5z"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.6"
+      strokeWidth="2"
       strokeLinejoin="round"
     />
   </IconBase>

@@ -283,6 +283,7 @@ setPod(null);
         placeItems: "center",
         padding: "24px",
         background: "#fff",
+        paddingBottom: "calc(96px + env(safe-area-inset-bottom) )",
       }}
     >
       <div style={{ maxWidth: 720, textTransform: "lowercase", width: "100%" }}>

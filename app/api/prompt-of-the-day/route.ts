@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import prompts from "@/app/data/prompts.json";
 
-// Updated to reflect current labels.
-type Prompt = { text: string; type: "question" | "picture question" };
+// ✅ kill all caching / static optimization
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
+
+type Prompt = { text: string; type?: string };
 
 // simple stable hash of a string → integer
 function hash(s: string) {
@@ -13,36 +17,24 @@ function hash(s: string) {
   return Math.abs(h);
 }
 
-// Parse "YYYY-MM-DD" as a UTC date
-function parseUTC(key: string) {
-  // Safe because we explicitly add Z (UTC) and zero time.
-  return new Date(`${key}T00:00:00Z`);
-}
-
-function formatUTC(d: Date) {
-  const y = d.getUTCFullYear();
-  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-  const dd = String(d.getUTCDate()).padStart(2, "0");
-  return `${y}-${m}-${dd}`;
-}
-
-function prevDayKey(key: string) {
-  const dt = parseUTC(key);
+// parse "YYYY-MM-DD" and return YYYY-MM-DD for previous calendar day
+function prevDay(ymd: string): string {
+  const [y, m, d] = ymd.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
   dt.setUTCDate(dt.getUTCDate() - 1);
-  return formatUTC(dt);
+  const yy = dt.getUTCFullYear();
+  const mm = String(dt.getUTCMonth() + 1).padStart(2, "0");
+  const dd = String(dt.getUTCDate()).padStart(2, "0");
+  return `${yy}-${mm}-${dd}`;
 }
 
-function indexForKey(key: string, len: number) {
-  return hash(key) % len;
-}
-
-function isPicture(p: Prompt | undefined) {
-  return p?.type === "picture question";
+function isPicture(t: string | undefined) {
+  return (t ?? "").toLowerCase().includes("picture");
 }
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
-  const keyParam = url.searchParams.get("key"); // optional: "YYYY-MM-DD"
+  const keyParam = url.searchParams.get("key"); // expected "YYYY-MM-DD"
 
   // default key = today's UTC date
   const today = new Date();
@@ -53,36 +45,32 @@ export async function GET(req: Request) {
 
   const key = keyParam && /^\d{4}-\d{2}-\d{2}$/.test(keyParam) ? keyParam : utcKey;
 
-  const arr = prompts as Prompt[];
+  const arr = (prompts as Prompt[]).filter(p => p && p.text); // guard
   const n = arr.length;
+  if (n === 0) {
+    return NextResponse.json(
+      { index: 0, text: "no prompts available", type: "other", date: key },
+      { headers: { "Cache-Control": "no-store" } }
+    );
+  }
 
-  // Candidate based on today's key
-  let i = indexForKey(key, n);
-  let item = arr[i];
+  // base index from the key
+  let i = hash(key) % n;
 
-  // If today and yesterday would both be "picture question",
-  // walk forward to the next non-picture deterministically.
-  if (isPicture(item)) {
-    const yKey = prevDayKey(key);
-    const j = indexForKey(yKey, n);
-    const yesterday = arr[j];
+  // ensure we don't have two "picture question" in a row (based on previous day)
+  const prevKey = prevDay(key);
+  const prevIndex = hash(prevKey) % n;
 
-    if (isPicture(yesterday)) {
-      // Find next non-picture index, wrapping around.
-      let k = (i + 1) % n;
-      let steps = 0;
-      while (steps < n && isPicture(arr[k])) {
-        k = (k + 1) % n;
-        steps++;
-      }
-      // Only switch if we actually found a non-picture
-      if (steps < n && !isPicture(arr[k])) {
-        i = k;
-        item = arr[i];
-      }
-      // If all are pictures (edge case), we just keep the original i
+  if (isPicture(arr[i].type) && isPicture(arr[prevIndex].type)) {
+    // walk forward until not picture (guaranteed to terminate if there's any non-picture)
+    let tries = 0;
+    while (tries < n && isPicture(arr[i].type)) {
+      i = (i + 1) % n;
+      tries++;
     }
   }
+
+  const item = arr[i];
 
   return NextResponse.json(
     { index: i, ...item, date: key },
@@ -95,3 +83,4 @@ export async function GET(req: Request) {
     }
   );
 }
+

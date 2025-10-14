@@ -375,22 +375,44 @@ setPod(null);
                 aria-label="upload a picture"
                 style={{ display: "none" }}
               />
-              <label
-                htmlFor="photo-input"
-                style={{
-                  display: "inline-block",
-                  padding: "10px 14px",
-                  borderRadius: 10,
-                  border: "1px solid #000",
-                  background: "transparent",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  marginBottom: 8,
-                  userSelect: "none",
-                }}
-              >
-                choose photo
-              </label>
+              
+            <label
+  htmlFor="photo-input"
+  onMouseDown={(e) => {
+    const el = e.currentTarget as HTMLLabelElement;
+    el.style.transform = "translateY(1px)";
+    el.style.boxShadow = "3px 3px 0 #000";
+  }}
+  onMouseUp={(e) => {
+    const el = e.currentTarget as HTMLLabelElement;
+    el.style.transform = "translateY(0)";
+    el.style.boxShadow = "4px 4px 0 #000";
+  }}
+  onMouseLeave={(e) => {
+    const el = e.currentTarget as HTMLLabelElement;
+    el.style.transform = "translateY(0)";
+    el.style.boxShadow = "4px 4px 0 #000";
+  }}
+  style={{
+    display: "inline-block",
+    padding: "10px 14px",
+    borderRadius: 10,
+    border: "1px solid #000",
+    background: "transparent",
+    fontWeight: 600,
+    cursor: "pointer",
+    marginBottom: 8,
+    userSelect: "none",
+    transition: "transform 120ms ease, box-shadow 120ms ease",
+    boxShadow: "4px 4px 0 #000",
+    transform: "translateY(0)",
+  }}
+>
+  choose photo
+</label>
+
+
+              
               {photoPreviewUrl && (
                 <div
                   style={{
@@ -408,43 +430,83 @@ setPod(null);
                     alt="preview"
                     style={{ maxWidth: "100%", maxHeight: 140, borderRadius: 6, display: "block" }}
                   />
+
+                  
                   <button
-                    onClick={clearPhoto}
-                    style={{
-                      padding: "8px 10px",
-                      borderRadius: 8,
-                      border: "1px solid #000",
-                      background: "transparent",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    remove
-                  </button>
+  onClick={clearPhoto}
+  onMouseDown={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(1px)";
+    el.style.boxShadow = "3px 3px 0 #000";
+  }}
+  onMouseUp={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(0)";
+    el.style.boxShadow = "4px 4px 0 #000";
+  }}
+  onMouseLeave={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(0)";
+    el.style.boxShadow = "4px 4px 0 #000";
+  }}
+  style={{
+    padding: "8px 10px",
+    borderRadius: 8,
+    border: "1px solid #000",
+    background: "transparent",
+    fontWeight: 600,
+    cursor: "pointer",
+    whiteSpace: "nowrap",
+    transition: "transform 120ms ease, box-shadow 120ms ease",
+    boxShadow: "4px 4px 0 #000",
+    transform: "translateY(0)",
+  }}
+>
+  remove
+</button>
+
+
+                  
                 </div>
               )}
             </div>
           )}
 
           {/* Submit button */}
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            <button
-              onClick={onSubmit}
-              style={{
-                padding: "10px 14px",
-                borderRadius: 10,
-                border: "1px solid #000",
-                background: "transparent",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              submit
-            </button>
-          </div>
-        </div>
-      </div>
+<div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+  <button
+    onClick={onSubmit}
+    onMouseDown={(e) => {
+      const el = e.currentTarget;
+      el.style.transform = "translateY(1px)";
+      el.style.boxShadow = "3px 3px 0 #000";
+    }}
+    onMouseUp={(e) => {
+      const el = e.currentTarget;
+      el.style.transform = "translateY(0)";
+      el.style.boxShadow = "4px 4px 0 #000";
+    }}
+    onMouseLeave={(e) => {
+      const el = e.currentTarget;
+      el.style.transform = "translateY(0)";
+      el.style.boxShadow = "4px 4px 0 #000";
+    }}
+    style={{
+      padding: "10px 14px",
+      borderRadius: 10,
+      border: "1px solid #000",
+      background: "transparent",
+      fontWeight: 600,
+      cursor: "pointer",
+      transition: "transform 120ms ease, box-shadow 120ms ease",
+      boxShadow: "4px 4px 0 #000",
+      transform: "translateY(0)",
+    }}
+  >
+    submit
+  </button>
+</div>
+
 
       {/* Modal popup on submit */}
       {showModal && (
@@ -479,33 +541,73 @@ setPod(null);
             </div>
 
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            
+              
               <button
-                onClick={shareNative}
-                style={{
-                  padding: "10px 14px",
-                  borderRadius: 10,
-                  border: "1px solid #000",
-                  background: "transparent",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                }}
-              >
-                share
-              </button>
+  onClick={shareNative}
+  onMouseDown={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(1px)";
+    el.style.boxShadow = "3px 3px 0 #000";
+  }}
+  onMouseUp={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(0)";
+    el.style.boxShadow = "4px 4px 0 #000";
+  }}
+  onMouseLeave={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(0)";
+    el.style.boxShadow = "4px 4px 0 #000";
+  }}
+  style={{
+    padding: "10px 14px",
+    borderRadius: 10,
+    border: "1px solid #000",
+    background: "transparent",
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "transform 120ms ease, box-shadow 120ms ease",
+    boxShadow: "4px 4px 0 #000",
+    transform: "translateY(0)",
+  }}
+>
+  share
+</button>
+
 
               <button
-                onClick={() => setShowModal(false)}
-                style={{
-                  padding: "10px 14px",
-                  borderRadius: 10,
-                  border: "1px solid #000",
-                  background: "transparent",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                }}
-              >
-                close
-              </button>
+  onClick={() => setShowModal(false)}
+  onMouseDown={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(1px)";
+    el.style.boxShadow = "3px 3px 0 #000";
+  }}
+  onMouseUp={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(0)";
+    el.style.boxShadow = "4px 4px 0 #000";
+  }}
+  onMouseLeave={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(0)";
+    el.style.boxShadow = "4px 4px 0 #000";
+  }}
+  style={{
+    padding: "10px 14px",
+    borderRadius: 10,
+    border: "1px solid #000",
+    background: "transparent",
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "transform 120ms ease, box-shadow 120ms ease",
+    boxShadow: "4px 4px 0 #000",
+    transform: "translateY(0)",
+  }}
+>
+  close
+</button>
+
             </div>
           </div>
         </div>

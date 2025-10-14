@@ -513,7 +513,7 @@ function InviteInner() {
               maxWidth: 420,
               border: "1px solid #000",
               borderRadius: 16,
-              padding: 16,
+              padding: 20,
               boxShadow: "4px 4px 0 #000",
               background: "#fff",
               textTransform: "lowercase",
@@ -524,7 +524,7 @@ function InviteInner() {
               send this playdate to: {friend || "friend"}
             </div>
 
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               <button
                 onClick={shareNative}
                 onMouseDown={(e) => {

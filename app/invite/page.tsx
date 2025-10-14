@@ -300,7 +300,7 @@ function InviteInner() {
           }}
         >
           {/* Title */}
-          <div style={{ marginBottom: 12 }}>
+          <div style={{ marginBottom: 16 }}>
             <div style={{ fontSize: 18, fontWeight: 700 }}>today&apos;s playdate:</div>
           </div>
 
@@ -314,7 +314,7 @@ function InviteInner() {
             style={{
               width: "100%",
               marginTop: 0,
-              marginBottom: 12,
+              marginBottom: 16,
               padding: "10px 12px",
               border: "1px solid #000",
               borderRadius: 8,
@@ -330,7 +330,7 @@ function InviteInner() {
           </div>
 
           {/* Answer box (autosizing) */}
-          <div style={{ marginBottom: 12 }}>
+          <div style={{ marginBottom: 16 }}>
             <textarea
               ref={answerRef}
               value={answer}
@@ -353,7 +353,7 @@ function InviteInner() {
 
           {/* Photo upload only for picture questions */}
           {isPictureDay && (
-            <div style={{ marginBottom: 12 }}>
+            <div style={{ marginBottom: 16 }}>
               <input
                 id="photo-input"
                 type="file"

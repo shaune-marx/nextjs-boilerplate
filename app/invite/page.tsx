@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 
 type Pod = { index: number; text: string; type: string; date: string };
 
@@ -94,6 +94,15 @@ function InviteInner() {
     } catch {
       return "";
     }
+const answerRef = useRef<HTMLTextAreaElement | null>(null);
+
+const autosize = () => {
+  const el = answerRef.current;
+  if (!el) return;
+  el.style.height = "auto";
+  el.style.height = el.scrollHeight + "px"; // grows to fit content
+};
+    
   });
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -334,20 +343,25 @@ setPod(null);
 
           {/* Answer box */}
           <div style={{ marginBottom: 12 }}>
-            <textarea
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-              aria-label="your answer"
-              placeholder="type your answer here"
-              rows={3}
-              style={{
-                width: "100%",
-                padding: "10px 12px",
-                border: "1px solid #000",
-                borderRadius: 8,
-                resize: "vertical",
-              }}
-            />
+           <textarea
+  ref={answerRef}
+  value={answer}
+  onChange={(e) => setAnswer(e.target.value)}
+  onInput={autosize}
+  aria-label="your answer"
+  placeholder="type your answer here"
+  rows={1}
+  style={{
+    width: "100%",
+    padding: "10px 12px",
+    border: "1px solid #000",
+    borderRadius: 8,
+    overflow: "hidden",   // hide scrollbar
+    resize: "none",       // prevent manual drag; we autosize instead
+    lineHeight: 1.4,
+  }}
+/>
+
           </div>
 
           {/* Photo upload only for picture questions */}

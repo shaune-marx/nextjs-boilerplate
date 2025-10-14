@@ -1,6 +1,6 @@
 export default function TermsPage() {
   return (
-    <main style={{ maxWidth: 720, margin: "0 auto", padding: 24, textTransform: "lowercase" }}>
+    <main style={{ maxWidth: 720, margin: "0 auto", padding: 24, textTransform: "lowercase", lineHeight: 1.5 }}>
       {/* terms header */}
       <h1 style={{ fontSize: 28, marginBottom: 12 }}>terms</h1>
 

@@ -81,7 +81,6 @@ function selectFriendOfDay(friends: string[], dateKey: string): string {
 function InviteInner() {
   const [friends, setFriends] = useState<string[]>([]);
   const [friend, setFriend] = useState<string>("");
-
   const [pod, setPod] = useState<Pod | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -94,15 +93,7 @@ function InviteInner() {
     } catch {
       return "";
     }
-const answerRef = useRef<HTMLTextAreaElement | null>(null);
-
-const autosize = () => {
-  const el = answerRef.current;
-  if (!el) return;
-  el.style.height = "auto";
-  el.style.height = el.scrollHeight + "px"; // grows to fit content
-};
-    
+const answerRef = useRef<HTMLTextAreaElement | null>(null); 
   });
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -110,6 +101,14 @@ const autosize = () => {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string>("");
 
+ const answerRef = useRef<HTMLTextAreaElement>(null);
+  const autosize = () => {
+    const el = answerRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  };
+  
   const [dateKey, setDateKey] = useState(localKeyFor10amCutover());
 
   const displayDate = useMemo(() => {

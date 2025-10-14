@@ -284,7 +284,15 @@ function InviteInner() {
       <div style={{ maxWidth: 720, textTransform: "lowercase", width: "100%" }}>
         {/* Logo block (same as app/page.tsx) */}
         <div style={{ marginBottom: 16, display: "flex", alignItems: "center", gap: 12 }}>
-          <Image src="/playdate-logo.png" alt="playdate" width={320} height={86} priority />
+        <Image
+  src="/playdate-logo.png"
+  alt="playdate"
+  width={320}
+  height={86}
+  priority
+  sizes="(max-width: 720px) 320px, 320px"
+/>
+
         </div>
 
         {/* Invite card */}

@@ -101,12 +101,35 @@ function InviteInner() {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string>("");
 
-  const dateKey = useMemo(() => localKeyFor10amCutover(), []);
+  const [dateKey, setDateKey] = useState(localKeyFor10amCutover());
+
   const displayDate = useMemo(() => {
     const [y, m, d] = dateKey.split("-");
     return `${m}-${d}-${y}`;
   }, [dateKey]);
 
+// keep dateKey fresh: update on focus/visibility and every 15s
+useEffect(() => {
+  const check = () => {
+    const k = localKeyFor10amCutover();
+    setDateKey((prev) => (prev === k ? prev : k));
+  };
+  const onFocus = () => check();
+  const onVisible = () => { if (!document.hidden) check(); };
+
+  const id = setInterval(check, 15 * 1000);
+  window.addEventListener("focus", onFocus);
+  document.addEventListener("visibilitychange", onVisible);
+
+  return () => {
+    clearInterval(id);
+    window.removeEventListener("focus", onFocus);
+    document.removeEventListener("visibilitychange", onVisible);
+  };
+}, []);
+
+
+  
   // per-day storage keys
   const answerKey = useMemo(() => `playdate:answer:${dateKey}`, [dateKey]);
 

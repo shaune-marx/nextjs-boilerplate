@@ -382,6 +382,7 @@ function InviteInner() {
                 style={{
                   display: "inline-block",
                   padding: "10px 14px",
+                  minHeight: 44,
                   borderRadius: 10,
                   border: "1px solid #000",
                   background: "transparent",
@@ -439,6 +440,7 @@ function InviteInner() {
       }}
       style={{
         padding: "8px 10px",
+        minHeight:44,
         borderRadius: 10,  // was 8
         border: "1px solid #000",
         background: "transparent",
@@ -550,6 +552,7 @@ function InviteInner() {
                 }}
                 style={{
                   padding: "10px 14px",
+                  minHeight: 44,
                   borderRadius: 10,
                   border: "1px solid #000",
                   background: "transparent",
@@ -582,6 +585,7 @@ function InviteInner() {
                 }}
                 style={{
                   padding: "10px 14px",
+                  minHeight: 44,
                   borderRadius: 10,
                   border: "1px solid #000",
                   background: "transparent",

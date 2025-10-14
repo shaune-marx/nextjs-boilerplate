@@ -136,19 +136,43 @@ const saveNow = () => {
 
 
        <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 12 }}>
-  <button
-    onClick={saveNow}
-    style={{
-      padding: "10px 14px",
-      borderRadius: 10,
-      border: "1px solid #000",
-      background: "transparent",
-      fontWeight: 600,
-      cursor: "pointer",
-    }}
-  >
-    save
-  </button>
+  
+         
+         <button
+  onMouseDown={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(1px)";
+    el.style.boxShadow = "3px 3px 0 #000";
+  }}
+  onMouseUp={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(0)";
+    el.style.boxShadow = "4px 4px 0 #000";
+  }}
+  onMouseLeave={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(0)";
+    el.style.boxShadow = "4px 4px 0 #000";
+  }}
+  style={{
+    padding: "12px 16px",
+    minHeight: 44,
+    borderRadius: 10,
+    border: "1px solid #000",
+    background: "transparent",
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "transform 120ms ease, box-shadow 120ms ease",
+    boxShadow: "4px 4px 0 #000",
+    transform: "translateY(0)",
+    textTransform: "lowercase",
+  }}
+>
+  save
+</button>
+
+
+         
   {justSaved && <span style={{ fontSize: 12, opacity: 0.7 }}>saved ✓</span>}
 </div>
 

@@ -326,7 +326,12 @@ function InviteInner() {
               lineHeight: 1.5,
             }}
           >
-            {loading ? "loading…" : text}
+           {loading ? (
+  <div className="shimmer" style={{ width: "100%", height: 18, borderRadius: 6 }} />
+) : (
+  text
+)}
+
           </div>
 
           {/* Answer box (autosizing) */}
@@ -602,6 +607,25 @@ function InviteInner() {
           </div>
         </div>
       )}
+
+<style jsx>{`
+  @keyframes shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+  }
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      #eee 0%,
+      #f5f5f5 40%,
+      #eee 80%
+    );
+    background-size: 400px 100%;
+    animation: shimmer 1.2s infinite linear;
+  }
+`}</style>
+
+      
     </main>
   );
 }

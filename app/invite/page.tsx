@@ -396,62 +396,67 @@ function InviteInner() {
               >
                 choose photo
               </label>
-              {photoPreviewUrl && (
-                <div
-                  style={{
-                    border: "1px solid #000",
-                    borderRadius: 8,
-                    padding: 8,
-                    background: "#f9f9f9",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                  }}
-                >
-                  <img
-                    src={photoPreviewUrl}
-                    alt="preview"
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: 140,
-                      borderRadius: 6,
-                      display: "block",
-                    }}
-                  />
-                  <button
-                    onClick={clearPhoto}
-                    onMouseDown={(e) => {
-                      const el = e.currentTarget;
-                      el.style.transform = "translateY(1px)";
-                      el.style.boxShadow = "3px 3px 0 #000";
-                    }}
-                    onMouseUp={(e) => {
-                      const el = e.currentTarget;
-                      el.style.transform = "translateY(0)";
-                      el.style.boxShadow = "4px 4px 0 #000";
-                    }}
-                    onMouseLeave={(e) => {
-                      const el = e.currentTarget;
-                      el.style.transform = "translateY(0)";
-                      el.style.boxShadow = "4px 4px 0 #000";
-                    }}
-                    style={{
-                      padding: "8px 10px",
-                      borderRadius: 8,
-                      border: "1px solid #000",
-                      background: "transparent",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      whiteSpace: "nowrap",
-                      transition: "transform 120ms ease, box-shadow 120ms ease",
-                      boxShadow: "4px 4px 0 #000",
-                      transform: "translateY(0)",
-                    }}
-                  >
-                    remove
-                  </button>
-                </div>
-              )}
+             
+              
+             {photoPreviewUrl && (
+  <div
+    style={{
+      border: "1px solid #000",
+      borderRadius: 8,
+      padding: 8,
+      background: "#f9f9f9",
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+    }}
+  >
+    <img
+      src={photoPreviewUrl}
+      alt="preview"
+      style={{
+        maxWidth: "100%",
+        maxHeight: 140,
+        borderRadius: 8,   // was 6
+        display: "block",
+      }}
+    />
+    <button
+      onClick={clearPhoto}
+      onMouseDown={(e) => {
+        const el = e.currentTarget;
+        el.style.transform = "translateY(1px)";
+        el.style.boxShadow = "3px 3px 0 #000";
+      }}
+      onMouseUp={(e) => {
+        const el = e.currentTarget;
+        el.style.transform = "translateY(0)";
+        el.style.boxShadow = "4px 4px 0 #000";
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget;
+        el.style.transform = "translateY(0)";
+        el.style.boxShadow = "4px 4px 0 #000";
+      }}
+      style={{
+        padding: "8px 10px",
+        borderRadius: 10,  // was 8
+        border: "1px solid #000",
+        background: "transparent",
+        fontWeight: 600,
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+        transition: "transform 120ms ease, box-shadow 120ms ease",
+        boxShadow: "4px 4px 0 #000",
+        transform: "translateY(0)",
+      }}
+    >
+      remove
+    </button>
+  </div>
+)}
+
+
+              
             </div>
           )}
 

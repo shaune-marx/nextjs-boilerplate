@@ -90,7 +90,7 @@ onSubmit={async (e) => {
 
 <label style={{ display: "block", width: "100%" }}>
   <span style={{ fontSize: 12, opacity: 0.7, display: "block", marginBottom: 4 }}>
-    email (required)
+    email
   </span>
   <input
     id="email"
@@ -108,7 +108,7 @@ onSubmit={async (e) => {
 
 <label style={{ display: "block", width: "100%" }}>
   <span style={{ fontSize: 12, opacity: 0.7, display: "block", marginTop: 8, marginBottom: 4 }}>
-    phone (optional)
+    phone
   </span>
   <input
     id="phone"

@@ -186,7 +186,8 @@ export default function BottomNav() {
               className={cn(
                 "group flex h-full w-full flex-col items-center justify-center rounded-xl transition",
                 // Light-only text colors + focus rings
-                "text-neutral-500 hover:text-neutral-800",
+                "text-black",
+                // light-only focus ring
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               )}
             >

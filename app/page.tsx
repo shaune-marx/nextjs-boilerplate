@@ -124,7 +124,6 @@ onSubmit={async (e) => {
 
          
 <button
-  onClick={/* your existing handler here */}
   onMouseDown={(e) => {
     const el = e.currentTarget;
     el.style.transform = "translateY(1px)";
@@ -142,7 +141,7 @@ onSubmit={async (e) => {
   }}
   style={{
     padding: "12px 16px",
-    minHeight: 44,                 // ensures good tap target (we'll do more in step 2)
+    minHeight: 44,
     borderRadius: 10,
     border: "1px solid #000",
     background: "transparent",
@@ -156,6 +155,7 @@ onSubmit={async (e) => {
 >
   sign up
 </button>
+
 
 
 

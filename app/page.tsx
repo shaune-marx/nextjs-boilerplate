@@ -229,7 +229,7 @@ onSubmit={async (e) => {
 )}
 
 
-        <p style={{ fontSize: 12, opacity: 0.7, marginTop: 4 }}>
+        <p style={{ fontSize: 12, opacity: 0.7, marginTop: 16 }}>
   by sharing your phone, you agree to receive texts from playdate (up to 1/day). reply stop to cancel, help for help. msg & data rates may apply. see{" "}
   <a href="/terms" style={{ textDecoration: "underline" }}>terms</a> &nbsp;and&nbsp;
   <a href="/privacy" style={{ textDecoration: "underline" }}>privacy</a>.

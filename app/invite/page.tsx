@@ -481,6 +481,7 @@ function InviteInner() {
               }}
               style={{
                 padding: "10px 14px",
+                minHeight: 44,
                 borderRadius: 10,
                 border: "1px solid #000",
                 background: "transparent",

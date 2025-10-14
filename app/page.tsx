@@ -124,21 +124,39 @@ onSubmit={async (e) => {
 
          
 <button
-  type="submit"
-  disabled={loading}
+  onClick={/* your existing handler here */}
+  onMouseDown={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(1px)";
+    el.style.boxShadow = "3px 3px 0 #000";
+  }}
+  onMouseUp={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(0)";
+    el.style.boxShadow = "4px 4px 0 #000";
+  }}
+  onMouseLeave={(e) => {
+    const el = e.currentTarget;
+    el.style.transform = "translateY(0)";
+    el.style.boxShadow = "4px 4px 0 #000";
+  }}
   style={{
-    padding: "12px 18px",
+    padding: "12px 16px",
+    minHeight: 44,                 // ensures good tap target (we'll do more in step 2)
     borderRadius: 10,
-    textDecoration: "none",
     border: "1px solid #000",
-    fontWeight: 600,
     background: "transparent",
-    cursor: loading ? "default" : "pointer",
-    opacity: loading ? 0.6 : 1,
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "transform 120ms ease, box-shadow 120ms ease",
+    boxShadow: "4px 4px 0 #000",
+    transform: "translateY(0)",
+    textTransform: "lowercase",
   }}
 >
-  {loading ? "signing up…" : "sign up"}
+  sign up
 </button>
+
 
 
 {status === "ok" && (

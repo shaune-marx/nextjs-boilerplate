@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-// --- Inline SVG icons (no external packages needed) ---
+// --- Inline SVG icons ---
 function IconBase(props: React.SVGProps<SVGSVGElement>) {
   return <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden {...props} />;
 }
@@ -50,11 +50,11 @@ const StarIcon = (p: React.SVGProps<SVGSVGElement>) => (
   </IconBase>
 );
 
-// --- Non-contact nav items (privacy removed) ---
+// --- Items (no privacy) ---
 const NAV_ITEMS = [
   { href: "/", label: "sign up", Icon: HomeIcon },
   { href: "/friends", label: "friends", Icon: UsersIcon },
-  { href: "/invite", label: "playdate", Icon: StarIcon }, // new
+  { href: "/invite", label: "playdate", Icon: StarIcon },
   { href: "/about", label: "about", Icon: InfoIcon },
   { href: "/terms", label: "terms", Icon: FileIcon },
 ] as const;
@@ -134,13 +134,14 @@ export default function BottomNav() {
         aria-label="Primary"
         className={cn(
           "fixed inset-x-0 bottom-0 z-50 border-t",
-          "backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-neutral-900/70",
-          "bg-white dark:bg-neutral-900"
+          // Force light look: remove all dark: variants
+          "backdrop-blur supports-[backdrop-filter]:bg-white/80",
+          "bg-white"
         )}
       >
         <ul
           className={cn(
-            "mx-auto grid max-w-screen-sm grid-cols-6", // back to 6
+            "mx-auto grid max-w-screen-sm grid-cols-6",
             "h-16 items-center gap-1 px-2",
             "pb-[env(safe-area-inset-bottom)]"
           )}
@@ -156,12 +157,10 @@ export default function BottomNav() {
                   title={label}
                   className={cn(
                     "group flex h-full flex-col items-center justify-center rounded-xl transition",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                    "focus-visible:ring-black dark:focus-visible:ring-white",
-                    "focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900",
-                    active
-                      ? "text-black dark:text-white"
-                      : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
+                    // Light-only focus rings
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+                    // Light-only text colors
+                    active ? "text-black" : "text-neutral-500 hover:text-neutral-800"
                   )}
                 >
                   <Icon
@@ -186,10 +185,9 @@ export default function BottomNav() {
               onClick={() => setContactOpen(true)}
               className={cn(
                 "group flex h-full w-full flex-col items-center justify-center rounded-xl transition",
-                "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                "focus-visible:ring-black dark:focus-visible:ring-white",
-                "focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900"
+                // Light-only text colors + focus rings
+                "text-neutral-500 hover:text-neutral-800",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               )}
             >
               <MailIcon aria-hidden="true" className="h-5 w-5" />
@@ -207,13 +205,16 @@ export default function BottomNav() {
           aria-label="Contact options"
           className="fixed inset-0 z-[60] flex items-end justify-center"
         >
+          {/* Backdrop */}
           <div
             className="fixed inset-0 bg-black/40 z-0"
             aria-hidden="true"
             onClick={() => setContactOpen(false)}
           />
-          <div className="relative z-10 w-full max-w-screen-sm rounded-t-2xl bg-white p-4 shadow-lg dark:bg-neutral-900">
-            <div className="mx-auto h-1 w-10 rounded-full bg-neutral-300/80 dark:bg-neutral-700/80 mb-3" />
+
+          {/* Sheet panel (kept as-is; it sits over the white nav) */}
+          <div className="relative z-10 w-full max-w-screen-sm rounded-t-2xl bg-white p-4 shadow-lg">
+            <div className="mx-auto h-1 w-10 rounded-full bg-neutral-300/80 mb-3" />
             <h2 className="text-center text-base mb-2">contact playdate</h2>
 
             <div className="grid gap-2">
@@ -221,7 +222,7 @@ export default function BottomNav() {
                 ref={firstContactRef}
                 tabIndex={0}
                 href="mailto:support@todaysplaydate.com"
-                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50"
                 onClick={() => setContactOpen(false)}
               >
                 Open email app
@@ -229,7 +230,7 @@ export default function BottomNav() {
 
               <button
                 type="button"
-                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50"
                 onClick={() => {
                   const to = "support@todaysplaydate.com";
                   const ua = navigator.userAgent || "";
@@ -253,12 +254,12 @@ export default function BottomNav() {
                   }, 600);
                 }}
               >
-                open gmail
+                Open Gmail
               </button>
 
               <button
                 type="button"
-                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                className="rounded-lg border px-4 py-3 text-center hover:bg-neutral-50"
                 onClick={async () => {
                   try {
                     await navigator.clipboard.writeText("support@todaysplaydate.com");
@@ -269,7 +270,7 @@ export default function BottomNav() {
                   }
                 }}
               >
-                {copied ? "Copied!" : "copy email address"}
+                {copied ? "Copied!" : "Copy email address"}
               </button>
 
               <button
@@ -277,7 +278,7 @@ export default function BottomNav() {
                 className="rounded-lg px-4 py-3 text-center underline opacity-80"
                 onClick={() => setContactOpen(false)}
               >
-                cancel
+                Cancel
               </button>
 
               <p className="text-center text-xs opacity-70 mt-1">

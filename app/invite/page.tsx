@@ -215,14 +215,23 @@ function InviteInner() {
     };
   }, [photoFile]);
 
+  // Debug switch to test photo UI even on non-picture days:
+  const forcePicture =
+    typeof window !== "undefined" && window.location.search.includes("force=picture");
+  const isPictureDay = pod?.type === "picture question" || forcePicture;
+  
   const text = pod?.text ?? "";
 
   // Prefilled SMS with blank lines
-  const sms =
-    `hey ${friend || "friend"}!\n\n` +
+const sms = isPictureDay
+  ? `hey ${friend || "friend"}!\n\n` +
     `today's playdate is: ${text}\n\n` +
-    `my answer: ${answer || ""}.\n\n` +
+    `send yours`
+  : `hey ${friend || "friend"}!\n\n` +
+    `today's playdate is: ${text}\n\n` +
+    `my answer: ${answer || ""}\n\n` +
     `what's your answer?`;
+
 
   // Share (keeps original behavior; attaches photo only when supported)
   const shareNative = async () => {
@@ -264,11 +273,6 @@ function InviteInner() {
     setPhotoFile(f);
   };
   const clearPhoto = () => setPhotoFile(null);
-
-  // Debug switch to test photo UI even on non-picture days:
-  const forcePicture =
-    typeof window !== "undefined" && window.location.search.includes("force=picture");
-  const isPictureDay = pod?.type === "picture question" || forcePicture;
 
   return (
     <main
@@ -344,24 +348,25 @@ function InviteInner() {
 
           {/* Answer box (autosizing) */}
           <div style={{ marginBottom: 16 }}>
-            <textarea
-              ref={answerRef}
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-              onInput={autosize}
-              aria-label="your answer"
-              placeholder="type your answer here"
-              rows={1}
-              style={{
-                width: "100%",
-                padding: "10px 12px",
-                border: "1px solid #000",
-                borderRadius: 8,
-                overflow: "hidden",
-                resize: "none",
-                lineHeight: 1.4,
-              }}
-            />
+          <textarea
+  ref={answerRef}
+  value={answer}
+  onChange={(e) => setAnswer(e.target.value)}
+  onInput={autosize}
+  aria-label="your answer"
+  placeholder={isPictureDay ? "photo context (optional)" : "type your answer here"}
+  rows={1}
+  style={{
+    width: "100%",
+    padding: "10px 12px",
+    border: "1px solid #000",
+    borderRadius: 8,
+    overflow: "hidden",
+    resize: "none",
+    lineHeight: 1.4,
+  }}
+/>
+
           </div>
 
           {/* Photo upload only for picture questions */}

@@ -81,7 +81,10 @@ function selectFriendOfDay(friends: string[], dateKey: string): string {
 function InviteInner() {
   const [friends, setFriends] = useState<string[]>([]);
   const [friend, setFriend] = useState<string>("");
+const hasFriends = friends.length > 0;
+const greetingName = (friend && hasFriends) ? friend : "friend";
 
+  
   const [pod, setPod] = useState<Pod | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -224,10 +227,10 @@ function InviteInner() {
 
   // Prefilled SMS with blank lines
 const sms = isPictureDay
-  ? `hey ${friend || "friend"}!\n\n` +
+  ? `hey ${greetingName}!\n\n` +
     `today's playdate is: ${text}\n\n` +
     `send yours`
-  : `hey ${friend || "friend"}!\n\n` +
+  : `hey ${greetingName}!\n\n` +
     `today's playdate is: ${text}\n\n` +
     `my answer: ${answer || ""}\n\n` +
     `what's your answer?`;
@@ -546,9 +549,12 @@ const sms = isPictureDay
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>
-              send this playdate to: {friend || "friend"}
-            </div>
+           <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 700 }}>
+  {hasFriends
+    ? <>send this playdate to: {friend}</>
+    : "send this to someone you want to talk to more often"}
+</div>
+
 
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               <button

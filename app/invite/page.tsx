@@ -225,15 +225,23 @@ const greetingName = (friend && hasFriends) ? friend : "friend";
   
   const text = pod?.text ?? "";
 
-  // Prefilled SMS with blank lines
+const trimmedAnswer = (answer || "").trim();
+
 const sms = isPictureDay
-  ? `hey ${greetingName}!\n\n` +
-    `today's playdate is: ${text}\n\n` +
-    `send yours`
-  : `hey ${greetingName}!\n\n` +
-    `today's playdate is: ${text}\n\n` +
-    `my answer: ${answer || ""}\n\n` +
-    `what's your answer?`;
+  ? (
+      // picture-question days
+      `hey ${greetingName}!\n\n` +
+      `today's playdate is: ${text}\n\n` +
+      `here's mine.${trimmedAnswer ? ` ${trimmedAnswer}` : ""}\n\n` +
+      `now send yours!\n`
+    )
+  : (
+      // non-picture days 
+      `hey ${greetingName}!\n\n` +
+      `today's playdate is: ${text}\n\n` +
+      `my answer: ${answer || ""}.\n\n` +
+      `what's your answer?`
+    );
 
 
   // Share (keeps original behavior; attaches photo only when supported)
